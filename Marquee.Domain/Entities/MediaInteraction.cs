@@ -4,6 +4,8 @@ namespace Marquee.Domain.Entities;
 
 public class MediaInteraction
 {
+    public long Id { get; set; }
+    
     public int UserId { get; set; }
     public User User { get; set; } = null!;
     

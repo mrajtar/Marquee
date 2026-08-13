@@ -15,5 +15,5 @@ public class MediaList
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
-    public ICollection<MediaListItem> Medias { get; set; } = [];
+    public ICollection<MediaListItem> Items { get; set; } = [];
 }

@@ -28,4 +28,5 @@ public abstract class Media
     
     public ICollection<Rating> Ratings { get; set; } = [];
     public ICollection<Review> Reviews { get; set; } = [];
+    public ICollection<MediaInteraction> Interactions { get; set; } = [];
 }

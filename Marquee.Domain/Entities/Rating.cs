@@ -8,7 +8,7 @@ public class Rating
     public int MediaId { get; set; }
     public Media Media { get; set; } = null!;
     
-    public decimal Value  { get; set; }
+    public int Value  { get; set; }
     
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
