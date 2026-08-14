@@ -6,6 +6,6 @@ public interface IUserTopMediaRepository
 {
     Task<IReadOnlyList<UserTopMedia>> GetForUserAsync (int userId);
     Task AddAsync (UserTopMedia topMedia);
-    Task Update (UserTopMedia topMedia);
-    Task Delete (UserTopMedia topMedia);
+    void Update (UserTopMedia topMedia);
+    void Delete (UserTopMedia topMedia);
 }

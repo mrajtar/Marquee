@@ -1,4 +1,7 @@
+using Marquee.Application.Interfaces;
+using Marquee.Application.Interfaces.Repositories;
 using Marquee.Infrastructure.Data;
+using Marquee.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,13 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<MarqueeDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
+builder.Services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<MarqueeDbContext>());
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
