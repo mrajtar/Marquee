@@ -1,10 +1,11 @@
-﻿using Marquee.Domain.Entities;
+﻿using Marquee.Application.Interfaces;
+using Marquee.Domain.Entities;
 using Marquee.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marquee.Infrastructure.Data;
 
-public class MarqueeDbContext : DbContext
+public class MarqueeDbContext : DbContext, IUnitOfWork
 {
     public MarqueeDbContext(DbContextOptions<MarqueeDbContext> options) : base(options) { }
     
