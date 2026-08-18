@@ -1,6 +1,7 @@
 using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Repositories;
 using Marquee.Application.Interfaces.Services;
+using Marquee.Application.Mapping;
 using Marquee.Application.Services;
 using Marquee.Infrastructure.Data;
 using Marquee.Infrastructure.Data.Repositories;
@@ -20,8 +21,7 @@ builder.Services.AddDbContext<MarqueeDbContext>(options =>
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<MarqueeDbContext>());
 builder.Services.AddScoped<IMediaService, MediaService>();
-
-
+builder.Services.AddAutoMapper(configuration => configuration.AddProfile<MediaProfile>(), typeof(MediaProfile));
 
 var app = builder.Build();
 

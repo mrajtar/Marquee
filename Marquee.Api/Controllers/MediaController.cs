@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Marquee.Application.Interfaces.Repositories;
 using Marquee.Application.Interfaces.Services;
 using Marquee.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Marquee.Controllers;
 [ApiController]
