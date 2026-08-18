@@ -8,7 +8,7 @@ public interface IMediaService
     Task<Media?> GetByIdWithDetails(int id, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<Media>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<IReadOnlyList<Media>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default);
-    Task<Media> AddAsync(Media media, CancellationToken cancellationToken = default);
-    Task UpdateAsync(Media media, CancellationToken cancellationToken = default);
+    Task<Media> AddAsync(Media media, IReadOnlyCollection<int> genreIds, IReadOnlyCollection<int> keywordIds, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Media media, IReadOnlyCollection<int> genreIds, IReadOnlyCollection<int> keywordIds, CancellationToken cancellationToken = default);
     Task DeleteAsync(int id, CancellationToken cancellationToken = default);
 }

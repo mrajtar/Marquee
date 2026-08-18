@@ -11,10 +11,10 @@ public class MediaDetailsDto
     public string? Overview { get; set; }
     public string? PosterUrl { get; set; }
     public string? BackdropUrl  { get; set; }
-    public Status Status { get; set; }
+    public Status? Status { get; set; }
     public DateTime? ReleaseDate { get; set; }
     public int? TmdbId { get; set; }
     public string? ImdbId { get; set; }
-    public MediaType  MediaType { get; set; }
+    public MediaType MediaType { get; set; }
     public List<Genre> Genres { get; set; } = [];
 }

@@ -39,9 +39,12 @@ public class MediaService : IMediaService
         return await _mediaRepository.SearchAsync(searchTerm, cancellationToken);
     }
 
-    public async Task<Media> AddAsync(Media media, CancellationToken cancellationToken = default)
+    public async Task<Media> AddAsync(Media media, IReadOnlyCollection<int> genreIds, IReadOnlyCollection<int> keywordIds, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(media);
+        
+        AddGenres(media, genreIds);
+        AddKeywords(media, keywordIds);
         
         await _mediaRepository.AddAsync(media, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -49,11 +52,30 @@ public class MediaService : IMediaService
         return media;
     }
 
-    public async Task UpdateAsync(Media media, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Media media, IReadOnlyCollection<int> genreIds, IReadOnlyCollection<int> keywordIds, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(media);
         
-        _mediaRepository.Update(media);
+        var existingMedia = await _mediaRepository.GetByIdWithDetailsAsync(media.Id, cancellationToken);
+        if  (existingMedia == null)
+            throw new KeyNotFoundException($"Media with id {media.Id} was not found.");
+        
+        existingMedia.Title = media.Title;
+        existingMedia.OriginalTitle = media.OriginalTitle;
+        existingMedia.Overview = media.Overview;
+        existingMedia.PosterUrl = media.PosterUrl;
+        existingMedia.BackdropUrl = media.BackdropUrl;
+        existingMedia.Status = media.Status;
+        existingMedia.ReleaseDate = media.ReleaseDate;
+        existingMedia.TmdbId = media.TmdbId;
+        existingMedia.ImdbId = media.ImdbId;
+        
+        existingMedia.MediaGenres.Clear();
+        existingMedia.MediaKeywords.Clear();
+        AddGenres(existingMedia, genreIds);
+        AddKeywords(existingMedia, keywordIds);
+        
+        _mediaRepository.Update(existingMedia);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
@@ -61,9 +83,34 @@ public class MediaService : IMediaService
     {
         var media = await _mediaRepository.GetByIdAsync(id, cancellationToken);
         if (media == null)
-            throw new KeyNotFoundException($"Media wit id {id} was not found");
+            throw new KeyNotFoundException($"Media with id {id} was not found.");
         
         _mediaRepository.Delete(media);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+
+    private static void AddGenres(Media media, IEnumerable<int> genreIds)
+    {
+        foreach (var genreId in genreIds.Distinct())
+        {
+            media.MediaGenres.Add(new MediaGenre
+            {
+                MediaId = media.Id,
+                GenreId = genreId
+            });
+        }
+    }
+
+    private static void AddKeywords(Media media, IEnumerable<int> keywordIds)
+    {
+        foreach (var keywordId in keywordIds.Distinct())
+        {
+            media.MediaKeywords.Add(new MediaKeyword
+            {
+                MediaId = media.Id,
+                KeywordId = keywordId
+            });
+        }
     }
 }
