@@ -3,6 +3,7 @@ using AutoMapper;
 using Marquee.Application.DTOs.Media;
 using Marquee.Application.Interfaces.Services;
 using Marquee.Domain.Entities;
+using Marquee.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marquee.Controllers;
@@ -47,7 +48,7 @@ public class MediaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetByIdWithDetails(int id, CancellationToken cancellationToken)
     {
-        var media = await _mediaService.GetByIdWithDetails(id, cancellationToken);
+        var media = await _mediaService.GetByIdWithDetailsAsync(id, cancellationToken);
 
         if (media == null)
             return NotFound(new { message = $"Media with ID {id} not found" });
@@ -75,14 +76,26 @@ public class MediaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Add([FromBody] CreateMediaDto dto, CancellationToken cancellationToken)
     {
-        var media = _mapper.Map<Media>(dto);
+        Media media;
+        switch (dto.MediaType)
+        {
+            case MediaType.Movie:
+                media = _mapper.Map<Movie>(dto);
+                break;
+            case MediaType.TvShow:
+                media = _mapper.Map<TvShow>(dto);
+                break;
+            default:
+                return BadRequest(new { message = "Media type not supported" });
+        }
+
         var created = await _mediaService.AddAsync(
             media,
             dto.GenreIds,
             dto.KeywordIds,
             cancellationToken);
         var result = _mapper.Map<MediaDetailsDto>(created);
-        return CreatedAtAction(nameof(GetByIdWithDetails), new { id = created.Id }, result);
+        return CreatedAtAction(nameof(GetByIdWithDetails),  new { id = created.Id }, result);
     }
 
     [HttpPut("{id:int}")]
@@ -91,9 +104,10 @@ public class MediaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateMediaDto dto, CancellationToken cancellationToken)
     {
-        var media = _mapper.Map<Media>(dto);
-        media.Id = id;
-        
+        var media = await _mediaService.GetByIdWithDetailsAsync(id, cancellationToken);
+        if (media == null)
+            return NotFound(new { message = $"Media with ID {id} not found."});
+        _mapper.Map(dto, media);
         try
         {
             await _mediaService.UpdateAsync(
@@ -101,12 +115,11 @@ public class MediaController : ControllerBase
                 dto.GenreIds,
                 dto.KeywordIds,
                 cancellationToken);
-            
             return NoContent();
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(new  { message = ex.Message });
+            return NotFound(new { message = ex.Message });
         }
     }
 

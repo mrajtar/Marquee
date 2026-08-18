@@ -5,8 +5,23 @@ POST http://localhost:5055/api/media
 Content-Type: application/json
 
 {
-  
+  "mediaType": 0,
+  "Title": "Inception",
+  "Overview": "A thief who steals corporate secrets through the use of dream-sharing technology."
 }
+
+### Update an existing Media item
+PUT http://localhost:5055/api/media/1
+Content-Type: application/json
+
+{
+  "title": "Inception (Extended Edition)",
+  "overview": "Updated overview for the movie.",
+  "status": 1,
+  "releaseDate": "2010-07-16T00:00:00Z"
+}
+### Delete an existing Media item
+DELETE http://localhost:5055/api/media/1
 
 ### Get all Media items to verify it saved
 GET http://localhost:5055/api/media

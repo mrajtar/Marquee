@@ -21,7 +21,7 @@ public class MediaService : IMediaService
         return await _mediaRepository.GetByIdAsync(id, cancellationToken);
     }
 
-    public async Task<Media?> GetByIdWithDetails(int id, CancellationToken cancellationToken = default)
+    public async Task<Media?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default)
     {
         return await _mediaRepository.GetByIdWithDetailsAsync(id, cancellationToken);
     }
@@ -70,12 +70,11 @@ public class MediaService : IMediaService
         existingMedia.TmdbId = media.TmdbId;
         existingMedia.ImdbId = media.ImdbId;
         
-        existingMedia.MediaGenres.Clear();
-        existingMedia.MediaKeywords.Clear();
-        AddGenres(existingMedia, genreIds);
-        AddKeywords(existingMedia, keywordIds);
+        media.MediaGenres.Clear();
+        media.MediaKeywords.Clear();
+        AddGenres(media, genreIds);
+        AddKeywords(media, keywordIds);
         
-        _mediaRepository.Update(existingMedia);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
@@ -96,7 +95,7 @@ public class MediaService : IMediaService
         {
             media.MediaGenres.Add(new MediaGenre
             {
-                MediaId = media.Id,
+                Media = media,
                 GenreId = genreId
             });
         }
@@ -108,7 +107,7 @@ public class MediaService : IMediaService
         {
             media.MediaKeywords.Add(new MediaKeyword
             {
-                MediaId = media.Id,
+                Media = media,
                 KeywordId = keywordId
             });
         }

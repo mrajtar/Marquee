@@ -17,14 +17,27 @@ public class MediaProfile : Profile
                 opt => opt.MapFrom(
                     src => src.MediaGenres.Select(x => x.Genre)));
 
-        CreateMap<CreateMediaDto, Media>()
+        CreateMap<CreateMediaDto, Movie>()
             .ForMember(
                 dest => dest.MediaGenres,
                 opt => opt.Ignore())
             .ForMember(
                 dest => dest.MediaKeywords,
                 opt => opt.Ignore());
-        CreateMap<UpdateMediaDto, Media>()
+        CreateMap<CreateMediaDto, TvShow>()
+            .ForMember(
+                dest => dest.MediaGenres,
+                opt => opt.Ignore())
+            .ForMember(
+                dest => dest.MediaKeywords,
+                opt => opt.Ignore());
+        CreateMap<UpdateMediaDto, Movie>()
+            .ForMember(
+                dest => dest.MediaGenres,
+                opt => opt.Ignore())
+            .ForMember(dest => dest.MediaKeywords,
+                opt => opt.Ignore());
+        CreateMap<UpdateMediaDto, TvShow>()
             .ForMember(
                 dest => dest.MediaGenres,
                 opt => opt.Ignore())
