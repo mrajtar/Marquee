@@ -21,7 +21,7 @@ Content-Type: application/json
   "releaseDate": "2010-07-16T00:00:00Z"
 }
 ### Delete an existing Media item
-DELETE http://localhost:5055/api/media/1
+DELETE http://localhost:5055/api/media/2
 
 ### Get all Media items to verify it saved
 GET http://localhost:5055/api/media

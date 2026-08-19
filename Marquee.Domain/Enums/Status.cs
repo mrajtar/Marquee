@@ -2,10 +2,10 @@
 
 public enum Status
 {
-    Planned,
-    InProduction,
-    Released,
-    Ongoing,
-    Ended,
-    Cancelled,
+    Planned = 1,
+    InProduction = 2,
+    Released = 3,
+    Ongoing = 4,
+    Ended = 5,
+    Cancelled = 6,
 }

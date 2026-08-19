@@ -2,8 +2,8 @@
 
 public enum InteractionType
 {
-    Watched,
-    Liked,
-    Disliked,
-    AddedToWatchList
+    Watched = 1,
+    Liked = 2,
+    Disliked = 3,
+    AddedToWatchList = 4
 }

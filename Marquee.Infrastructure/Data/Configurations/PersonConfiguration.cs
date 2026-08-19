@@ -17,6 +17,8 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
             .HasMaxLength(5000);
         builder.Property(p => p.ProfileImageUrl)
             .HasMaxLength(500);
+        builder.Property(p => p.PlaceOfBirth)
+            .HasMaxLength(500);
         
         builder.HasIndex(p => p.TmdbId)
             .IsUnique()

@@ -8,10 +8,16 @@ public class MediaPersonConfiguration : IEntityTypeConfiguration<MediaPerson>
 {
     public void Configure(EntityTypeBuilder<MediaPerson> builder)
     {
-        builder.HasKey(mp => new { mp.MediaId, mp.PersonId, mp.Role });
+        builder.HasKey(mp => mp.Id);
 
         builder.Property(mp => mp.CharacterName)
             .HasMaxLength(200);
+
+        builder.Property(mp => mp.CreditOrder)
+            .IsRequired(false);
+        
+        builder.HasIndex(mp => new { mp.MediaId, mp.PersonId, mp.Role, mp.CharacterName})
+            .IsUnique();
         
         builder.HasOne(mp => mp.Person)
             .WithMany(m => m.MediaPeople)

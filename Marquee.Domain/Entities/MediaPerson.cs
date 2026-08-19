@@ -4,6 +4,7 @@ namespace Marquee.Domain.Entities;
 
 public class MediaPerson
 {
+    public int Id { get; set; }
     public int MediaId  { get; set; }
     public Media Media { get; set; } = null!;
     public int PersonId { get; set; }
@@ -12,4 +13,6 @@ public class MediaPerson
     public string? CharacterName { get; set; }
     
     public MediaRole Role { get; set; }
+    
+    public int? CreditOrder { get; set; }
 }

@@ -2,6 +2,6 @@
 
 public enum MediaType
 {
-    Movie,
-    TvShow
+    Movie = 1,
+    TvShow = 2
 }

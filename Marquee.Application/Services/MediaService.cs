@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Marquee.Application.Interfaces;
+﻿using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Repositories;
 using Marquee.Application.Interfaces.Services;
 using Marquee.Domain.Entities;
