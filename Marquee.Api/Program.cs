@@ -18,14 +18,16 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<MarqueeDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<MarqueeDbContext>());
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaService, MediaService>();
-builder.Services.AddAutoMapper(configuration => configuration.AddProfile<MediaProfile>(), typeof(MediaProfile));
-builder.Services.AddAutoMapper(configuration => configuration.AddProfile<PersonProfile>(), typeof(PersonProfile));
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
-
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddAutoMapper(configuration => configuration.AddProfile<MediaProfile>(), typeof(MediaProfile));
+builder.Services.AddAutoMapper(configuration => configuration.AddProfile<PersonProfile>(), typeof(PersonProfile));
+builder.Services.AddAutoMapper(configuration => configuration.AddProfile<GenreProfile>(), typeof(GenreProfile));
 
 
 var app = builder.Build();

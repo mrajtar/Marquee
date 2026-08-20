@@ -17,6 +17,7 @@ public class MarqueeDbContext : DbContext, IUnitOfWork
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<UserTopMedia> UserTopMedia => Set<UserTopMedia>();
     public DbSet<Person> People => Set<Person>();
+    public DbSet<Genre> Genres => Set<Genre>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

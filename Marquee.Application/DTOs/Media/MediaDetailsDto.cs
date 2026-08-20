@@ -1,5 +1,4 @@
-﻿using Marquee.Domain.Entities;
-using Marquee.Domain.Enums;
+﻿using Marquee.Domain.Enums;
 
 namespace Marquee.Application.DTOs.Media;
 
@@ -16,5 +15,5 @@ public class MediaDetailsDto
     public int? TmdbId { get; set; }
     public string? ImdbId { get; set; }
     public MediaType MediaType { get; set; }
-    public List<Genre> Genres { get; set; } = [];
+    public List<Domain.Entities.Genre> Genres { get; set; } = [];
 }

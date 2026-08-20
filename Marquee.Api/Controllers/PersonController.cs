@@ -5,6 +5,7 @@ using Marquee.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marquee.Controllers;
+
 [ApiController]
 [Route("api/people")]
 public class PersonController : ControllerBase
@@ -33,10 +34,7 @@ public class PersonController : ControllerBase
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
         var person = await _personService.GetByIdWithDetailsAsync(id, cancellationToken);
-        
-        if (person == null)
-            return NotFound(new { message = $"Person with id {id} not found." });
-        
+        if (person == null) return NotFound(new { message = $"Person with id {id} not found." });
         var result = _mapper.Map<PersonDetailsDto>(person);
         return Ok(result);
     }
@@ -46,9 +44,7 @@ public class PersonController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search([FromQuery] string searchTerm, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(searchTerm))
-            return BadRequest(
-                new { message = "Search term is required." });
+        if (string.IsNullOrWhiteSpace(searchTerm)) return BadRequest(new { message = "Search term is required." });
         var people = await _personService.SearchAsync(searchTerm, cancellationToken);
         var result = _mapper.Map<List<PersonListDto>>(people);
         return Ok(result);
@@ -87,7 +83,7 @@ public class PersonController : ControllerBase
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(new {message = ex.Message });
+            return NotFound(new { message = ex.Message });
         }
     }
 
