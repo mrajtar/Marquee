@@ -18,6 +18,7 @@ public class MarqueeDbContext : DbContext, IUnitOfWork
     public DbSet<UserTopMedia> UserTopMedia => Set<UserTopMedia>();
     public DbSet<Person> People => Set<Person>();
     public DbSet<Genre> Genres => Set<Genre>();
+    public DbSet<Keyword> Keywords => Set<Keyword>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
