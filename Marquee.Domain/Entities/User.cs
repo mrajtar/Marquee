@@ -1,10 +1,9 @@
-﻿namespace Marquee.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class User
+namespace Marquee.Domain.Entities;
+
+public class User : IdentityUser<int>
 {
-    public int Id { get; set; }
-
-    public string Username { get; set; } = null!;
     public string? DisplayName { get; set; }
     public string? Bio { get; set; }
     public string? ProfileImageUrl { get; set; }

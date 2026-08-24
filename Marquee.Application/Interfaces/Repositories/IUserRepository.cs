@@ -4,9 +4,7 @@ namespace Marquee.Application.Interfaces.Repositories;
 
 public interface IUserRepository
 {
-    Task<User?> GetByIdAsync(int id);
-    Task<User?> GetByUsernameAsync(string username);
-    Task AddAsync(User user);
-    void Update(User user);
+    Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<User>> GetAllAsync(CancellationToken cancellationToken = default);
     void Delete(User user);
 }

@@ -1,0 +1,90 @@
+﻿using System.Security.Claims;
+using AutoMapper;
+using Marquee.Application.DTOs.User;
+using Marquee.Application.Interfaces.Services;
+using Marquee.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Marquee.Controllers;
+
+[ApiController]
+[Route("api/users")]
+public class UserController : ControllerBase
+{
+    private readonly IUserService  _userService;
+    private readonly IMapper _mapper;
+
+    public UserController(IUserService userService, IMapper mapper)
+    {
+        _userService = userService;
+        _mapper = mapper;
+    }
+
+    [HttpGet("{id:int}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(UserDetailsDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
+    {
+        var user = await _userService.GetByIdAsync(id, cancellationToken);
+
+        if (user == null)
+        {
+            return NotFound(new { message = $"User with ID {id} not found." });
+        }
+        return Ok(_mapper.Map<UserDetailsDto>(user));
+    }
+
+    [HttpPut("me")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> UpdateMe([FromBody] UpdateUserDto dto, CancellationToken cancellationToken)
+    {
+        var userId = GetCurrentUserId();
+
+        if (userId == null)
+            return Unauthorized();
+        
+        var user = _mapper.Map<User>(dto);
+        user.Id = userId.Value;
+
+        try
+        {
+            await _userService.UpdateAsync(user, cancellationToken);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [HttpDelete("me")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> DeleteMe(CancellationToken cancellationToken)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null)
+            return Unauthorized();
+
+        try
+        {
+            await _userService.DeleteAsync(userId.Value, cancellationToken);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    private int? GetCurrentUserId()
+    {
+        var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+        return int.TryParse(claim?.Value, out var userId) ? userId : null;
+    }
+}
