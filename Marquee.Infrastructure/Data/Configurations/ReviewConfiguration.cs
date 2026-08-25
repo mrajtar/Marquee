@@ -9,9 +9,10 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
     public void Configure(EntityTypeBuilder<Review> builder)
     {
         builder.HasKey(r => r.Id);
-        
+
         builder.Property(r => r.Content)
-            .IsRequired();
+            .IsRequired()
+            .HasMaxLength(10000);
         
         builder.HasOne(r => r.User)
             .WithMany(u => u.Reviews)

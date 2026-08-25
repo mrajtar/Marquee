@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Marquee.Application.DTOs.Rating;
 using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Services;

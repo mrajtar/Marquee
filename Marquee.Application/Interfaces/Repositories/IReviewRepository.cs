@@ -4,10 +4,10 @@ namespace Marquee.Application.Interfaces.Repositories;
 
 public interface IReviewRepository
 {
-    Task<Review?> GetByIdAsync(int id);
-    Task<IReadOnlyList<Review>> GetForMediaAsync(int mediaId);
-    Task<IReadOnlyList<Review>> GetForUserAsync(int userId);
-    Task AddAsync(Review review);
-    void Update(Review review);
+    Task<Review?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<Review?> GetByIdWitUserAsync(int id, CancellationToken cancellationToken = default);
+    Task<Review?> GetByUserAndMediaAsync(int userId, int mediaId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Review>> GetByMediaIdAsync(int mediaId, CancellationToken cancellationToken = default);
+    Task AddAsync(Review review, CancellationToken cancellationToken = default);
     void Delete(Review review);
 }
