@@ -24,7 +24,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<MarqueeDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<MarqueeDbContext>());
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaService, MediaService>();
@@ -40,6 +40,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<MediaProfile>(), typeof(MediaProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<PersonProfile>(), typeof(PersonProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<GenreProfile>(), typeof(GenreProfile));

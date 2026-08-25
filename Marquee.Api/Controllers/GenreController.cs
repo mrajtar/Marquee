@@ -2,6 +2,7 @@
 using Marquee.Application.DTOs.Genre;
 using Marquee.Application.Interfaces.Services;
 using Marquee.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marquee.Controllers;
@@ -20,6 +21,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<GenreListDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
@@ -29,6 +31,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(GenreDetailsDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
@@ -40,21 +43,9 @@ public class GenreController : ControllerBase
         var result = _mapper.Map<GenreDetailsDto>(genre);
         return Ok(result);
     }
-    
-    [HttpGet("{id:int}/details")]
-    [ProducesResponseType(typeof(GenreDetailsDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetByIdWithDetails(int id, CancellationToken cancellationToken)
-    {
-        var genre = await _genreService.GetByIdWithDetailsAsync(id, cancellationToken);
-        if (genre == null)
-            return NotFound(new { message = $"Genre with ID {id} not found" });
-        
-        var result = _mapper.Map<GenreDetailsDto>(genre);
-        return Ok(result);
-    }
 
     [HttpGet("search")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<GenreListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search([FromQuery] string searchTerm, CancellationToken cancellationToken)
@@ -68,6 +59,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(GenreDetailsDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -91,6 +83,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -115,6 +108,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)

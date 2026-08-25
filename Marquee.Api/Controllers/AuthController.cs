@@ -1,4 +1,5 @@
 ﻿using Marquee.Application.DTOs.Auth;
+using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace Marquee.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly ICurrentUserService _currentUserService;
     
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, ICurrentUserService currentUserService)
     {
         _authService = authService;
+        _currentUserService = currentUserService;
     }
 
     [HttpPost("register")]
@@ -57,7 +60,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto, CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         if (userId == null)
             return Unauthorized();
 
@@ -74,11 +77,5 @@ public class AuthController : ControllerBase
         {
             return NotFound(new { message = ex.Message });
         }
-    }
-
-    private int? GetCurrentUserId()
-    {
-        var claim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-        return int.TryParse(claim?.Value, out var userId) ? userId : null;
     }
 }

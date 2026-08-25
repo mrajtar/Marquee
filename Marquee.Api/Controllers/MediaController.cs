@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+﻿using AutoMapper;
 using Marquee.Application.DTOs.Media;
 using Marquee.Application.Interfaces.Services;
 using Marquee.Domain.Entities;
 using Marquee.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marquee.Controllers;
@@ -22,6 +22,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<MediaListDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
@@ -31,6 +32,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(MediaListDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
@@ -42,6 +44,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet("{id:int}/details")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(MediaDetailsDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetByIdWithDetails(int id, CancellationToken cancellationToken)
@@ -56,6 +59,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet("search")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<MediaListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search([FromQuery] string searchTerm, CancellationToken cancellationToken)
@@ -67,6 +71,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(MediaDetailsDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Add([FromBody] CreateMediaDto dto, CancellationToken cancellationToken)
@@ -90,6 +95,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -110,6 +116,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)

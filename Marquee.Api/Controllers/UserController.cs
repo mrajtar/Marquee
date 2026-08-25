@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using Marquee.Application.DTOs.User;
+using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Services;
 using Marquee.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -14,11 +15,13 @@ public class UserController : ControllerBase
 {
     private readonly IUserService  _userService;
     private readonly IMapper _mapper;
+    private readonly ICurrentUserService  _currentUserService;
 
-    public UserController(IUserService userService, IMapper mapper)
+    public UserController(IUserService userService, IMapper mapper, ICurrentUserService currentUserService)
     {
         _userService = userService;
         _mapper = mapper;
+        _currentUserService = currentUserService;
     }
 
     [HttpGet("{id:int}")]
@@ -42,7 +45,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdateMe([FromBody] UpdateUserDto dto, CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
 
         if (userId == null)
             return Unauthorized();
@@ -67,7 +70,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> DeleteMe(CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         if (userId == null)
             return Unauthorized();
 
@@ -80,11 +83,5 @@ public class UserController : ControllerBase
         {
             return NotFound(new { message = ex.Message });
         }
-    }
-
-    private int? GetCurrentUserId()
-    {
-        var claim = User.FindFirst(ClaimTypes.NameIdentifier);
-        return int.TryParse(claim?.Value, out var userId) ? userId : null;
     }
 }

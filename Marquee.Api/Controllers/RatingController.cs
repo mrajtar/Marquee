@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using Marquee.Application.DTOs.Rating;
+using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ public class RatingController : ControllerBase
 {
     private readonly IRatingService _ratingService;
     private readonly IMapper _mapper;
+    private readonly ICurrentUserService _currentUserService;
 
-    public RatingController(IRatingService ratingService, IMapper mapper)
+    public RatingController(IRatingService ratingService, IMapper mapper, ICurrentUserService currentUserService)
     {
         _ratingService = ratingService;
         _mapper = mapper;
+        _currentUserService = currentUserService;
     }
 
     [HttpGet]
@@ -26,7 +29,7 @@ public class RatingController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetRating(int mediaId, CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
 
         if (userId is null)
             return Unauthorized();
@@ -47,7 +50,7 @@ public class RatingController : ControllerBase
     public async Task<IActionResult> SetRating(int mediaId, [FromBody] SetRatingDto dto,
         CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         
         if (userId is null)
             return Unauthorized();
@@ -68,7 +71,7 @@ public class RatingController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteRating(int mediaId, CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         
         if (userId is null)
             return Unauthorized();
@@ -82,11 +85,5 @@ public class RatingController : ControllerBase
         {
             return NotFound(new { message = ex.Message });
         }
-    }
-
-    private int? GetCurrentUserId()
-    {
-        var claim = User.FindFirst(ClaimTypes.NameIdentifier);
-        return int.TryParse(claim?.Value, out var userId) ? userId : null;
     }
 }
