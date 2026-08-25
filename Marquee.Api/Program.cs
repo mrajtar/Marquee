@@ -38,12 +38,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<MediaProfile>(), typeof(MediaProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<PersonProfile>(), typeof(PersonProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<GenreProfile>(), typeof(GenreProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<KeywordProfile>(), typeof(KeywordProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<UserProfile>(), typeof(UserProfile));
-
+builder.Services.AddAutoMapper(configuration => configuration.AddProfile<RatingProfile>(), typeof(RatingProfile));
 
 
 

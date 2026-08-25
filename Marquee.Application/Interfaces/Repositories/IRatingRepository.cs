@@ -4,10 +4,7 @@ namespace Marquee.Application.Interfaces.Repositories;
 
 public interface IRatingRepository
 {
-    Task<Rating?> GetAsync(int userId, int mediaId);
-    Task<IReadOnlyList<Rating>> GetAllAsync(int mediaId);
-    Task<IReadOnlyList<Rating>> GetForUserAsync(int userId);
-    Task AddAsync(Rating rating);
-    void Update(Rating rating);
+    Task<Rating?> GetAsync(int userId, int mediaId, CancellationToken cancellationToken);
+    Task AddAsync(Rating rating, CancellationToken cancellationToken);
     void Delete(Rating rating);
 }
