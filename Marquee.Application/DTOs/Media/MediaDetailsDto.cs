@@ -16,4 +16,6 @@ public class MediaDetailsDto
     public string? ImdbId { get; set; }
     public MediaType MediaType { get; set; }
     public List<Domain.Entities.Genre> Genres { get; set; } = [];
+    public double? AverageRating { get; set; }
+    public int RatingCount { get; set; }
 }

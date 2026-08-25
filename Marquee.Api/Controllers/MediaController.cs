@@ -49,6 +49,9 @@ public class MediaController : ControllerBase
         var media = await _mediaService.GetByIdWithDetailsAsync(id, cancellationToken);
         if (media == null) return NotFound(new { message = $"Media with ID {id} not found" });
         var result = _mapper.Map<MediaDetailsDto>(media);
+        var (averageRating, ratingCount) = await _mediaService.GetRatingSummaryAsync(id, cancellationToken);
+        result.AverageRating = averageRating;
+        result.RatingCount = ratingCount;
         return Ok(result);
     }
 

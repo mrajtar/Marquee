@@ -53,6 +53,19 @@ public class MediaRepository : IMediaRepository
             .OrderBy(m => m.Title)
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<(double? AverageRating, int RatingCount)> GetRatingSummaryAsync(int mediaId,
+        CancellationToken cancellationToken = default)
+    {
+        var ratings = _context.Ratings.Where(r => r.MediaId == mediaId);
+        var count = await ratings.CountAsync(cancellationToken);
+        
+        if (count is 0)
+            return (null, 0);
+
+        var average = await ratings.AverageAsync(r => (double)r.Value, cancellationToken);
+        return (average, count);
+    }
 
     public async Task AddAsync(Media media, CancellationToken cancellationToken = default)
     {
