@@ -12,6 +12,7 @@ public class User : IdentityUser<int>
 
     public ICollection<Rating> Ratings { get; set; } = [];
     public ICollection<Review> Reviews { get; set; } = [];
+    public ICollection<ReviewLike> ReviewLikes { get; set; } = [];
     public ICollection<MediaInteraction> MediaInteractions { get; set; } = [];
     public ICollection<MediaList> MediaLists { get; set; } = [];
     public ICollection<UserTopMedia> TopMedia { get; set; } = [];

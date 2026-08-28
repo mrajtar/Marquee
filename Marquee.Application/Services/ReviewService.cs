@@ -21,7 +21,7 @@ public class ReviewService : IReviewService
         return await _reviewRepository.GetByMediaIdAsync(mediaId, cancellationToken);
     }
 
-    public async Task<Review> CreateAsync(int userId, int mediaId, string content, CancellationToken cancellationToken = default)
+    public async Task<Review> CreateAsync(int userId, int mediaId, string content, bool containsSpoilers, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(content))
         {
@@ -35,6 +35,7 @@ public class ReviewService : IReviewService
             UserId = userId,
             MediaId = mediaId,
             Content = content,
+            ContainsSpoilers = containsSpoilers,
             CreatedAt = DateTime.UtcNow
         };
         await _reviewRepository.AddAsync(review, cancellationToken);
@@ -42,7 +43,7 @@ public class ReviewService : IReviewService
         return review;
     }
 
-    public async Task UpdateAsync(int userId, int reviewId, string content, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(int userId, int reviewId, string content, bool containsSpoilers, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(content))
         {
@@ -64,6 +65,7 @@ public class ReviewService : IReviewService
         }
 
         review.Content = content;
+        review.ContainsSpoilers = containsSpoilers;
         review.UpdatedAt = DateTime.UtcNow;
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);

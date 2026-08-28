@@ -67,6 +67,11 @@ public class MediaRepository : IMediaRepository
         return (average, count);
     }
 
+    public async Task<int> GetReviewCountAsync(int mediaId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Reviews.CountAsync(r => r.MediaId == mediaId, cancellationToken);
+    }
+
     public async Task AddAsync(Media media, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(media);

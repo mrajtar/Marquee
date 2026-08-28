@@ -7,4 +7,5 @@ public class CreateReviewDto
     [Required]
     [MaxLength(10000)]
     public string Content { get; set; } = null!;
+    public bool ContainsSpoilers { get; set; }
 }

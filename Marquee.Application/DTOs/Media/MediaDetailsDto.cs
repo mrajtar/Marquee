@@ -18,4 +18,5 @@ public class MediaDetailsDto
     public List<Domain.Entities.Genre> Genres { get; set; } = [];
     public double? AverageRating { get; set; }
     public int RatingCount { get; set; }
+    public int ReviewCount { get; set; }
 }

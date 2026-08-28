@@ -15,4 +15,5 @@ public class Review
     public DateTime? UpdatedAt { get; set; }
 
     public bool ContainsSpoilers { get; set; }
+    public ICollection<ReviewLike> Likes { get; set; } = [];
 }

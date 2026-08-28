@@ -21,6 +21,7 @@ public class MarqueeDbContext : IdentityDbContext<User, IdentityRole<int>, int>,
     public DbSet<Genre> Genres => Set<Genre>();
     public DbSet<Keyword> Keywords => Set<Keyword>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<ReviewLike> ReviewLikes => Set<ReviewLike>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

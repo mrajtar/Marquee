@@ -44,7 +44,7 @@ public class ReviewController : ControllerBase
 
         try
         {
-            var review = await _reviewService.CreateAsync(userId.Value, mediaId, dto.Content, cancellationToken);
+            var review = await _reviewService.CreateAsync(userId.Value, mediaId, dto.Content, dto.ContainsSpoilers, cancellationToken);
             var result = _mapper.Map<ReviewListDto>(review);
             return CreatedAtAction(nameof(GetByMedia), new { mediaId }, result);
         }
@@ -69,7 +69,7 @@ public class ReviewController : ControllerBase
 
         try
         {
-            await _reviewService.UpdateAsync(userId.Value, reviewId, dto.Content, cancellationToken);
+            await _reviewService.UpdateAsync(userId.Value, reviewId, dto.Content, dto.ContainsSpoilers, cancellationToken);
             return NoContent();
         }
         catch (ArgumentException ex)

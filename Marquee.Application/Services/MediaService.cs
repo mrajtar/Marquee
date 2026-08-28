@@ -43,6 +43,11 @@ public class MediaService : IMediaService
         return await _mediaRepository.GetRatingSummaryAsync(mediaId, cancellationToken);
     }
 
+    public async Task<int> GetReviewCountAsync(int mediaId, CancellationToken cancellationToken = default)
+    {
+        return await _mediaRepository.GetReviewCountAsync(mediaId, cancellationToken);
+    }
+
     public async Task<Media> AddAsync(Media media, IReadOnlyCollection<int> genreIds, IReadOnlyCollection<int> keywordIds, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(media);

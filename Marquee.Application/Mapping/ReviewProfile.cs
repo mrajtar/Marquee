@@ -13,6 +13,8 @@ public class ReviewProfile : Profile
             .ForMember(dest => dest.Username,
                 opt => opt.MapFrom(src => src.User.UserName))
             .ForMember(dest => dest.DisplayName,
-                opt => opt.MapFrom(src => src.User.DisplayName));
+                opt => opt.MapFrom(src => src.User.DisplayName))
+            .ForMember(dest => dest.ProfileImageUrl,
+                opt => opt.MapFrom(src => src.User.ProfileImageUrl));
     }
 }
