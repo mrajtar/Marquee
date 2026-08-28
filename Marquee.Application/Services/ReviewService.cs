@@ -1,4 +1,5 @@
-﻿using Marquee.Application.Interfaces;
+﻿using Marquee.Application.DTOs.Review;
+using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Repositories;
 using Marquee.Application.Interfaces.Services;
 using Marquee.Domain.Entities;
@@ -16,9 +17,14 @@ public class ReviewService : IReviewService
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<IReadOnlyList<Review>> GetByMediaIdAsync(int mediaId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<ReviewListDto>> GetByMediaIdAsync(int mediaId, int? currentUserId, CancellationToken cancellationToken = default)
     {
-        return await _reviewRepository.GetByMediaIdAsync(mediaId, cancellationToken);
+        return await _reviewRepository.GetByMediaIdAsync(mediaId, currentUserId, cancellationToken);
+    }
+
+    public async Task<ReviewListDto?> GetDtoByIdAsync(int reviewId, int? currentUserId, CancellationToken cancellationToken = default)
+    {
+        return await _reviewRepository.GetDtoByIdAsync(reviewId, currentUserId, cancellationToken);
     }
 
     public async Task<Review> CreateAsync(int userId, int mediaId, string content, bool containsSpoilers, CancellationToken cancellationToken = default)

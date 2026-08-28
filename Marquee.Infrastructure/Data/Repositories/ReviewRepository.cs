@@ -1,4 +1,5 @@
-﻿using Marquee.Application.Interfaces.Repositories;
+﻿using Marquee.Application.DTOs.Review;
+using Marquee.Application.Interfaces.Repositories;
 using Marquee.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,9 +29,47 @@ public class ReviewRepository : IReviewRepository
         return await _context.Reviews.FirstOrDefaultAsync(r => r.UserId  == userId && r.MediaId == mediaId, cancellationToken);
     }
 
-    public async Task<IReadOnlyList<Review>> GetByMediaIdAsync(int mediaId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<ReviewListDto>> GetByMediaIdAsync(int mediaId, int? currentUserId, CancellationToken cancellationToken = default)
     {
-        return await _context.Reviews.AsNoTracking().Include(r => r.User).Where(r => r.MediaId == mediaId).ToListAsync(cancellationToken);
+        return await _context.Reviews
+            .AsNoTracking()
+            .Where(r => r.MediaId == mediaId)
+            .OrderByDescending(r => r.CreatedAt)
+            .Select(r => new ReviewListDto
+            {
+                Id = r.Id,
+                MediaId = r.MediaId,
+                Username = r.User.UserName!,
+                DisplayName = r.User.DisplayName,
+                ProfileImageUrl = r.User.ProfileImageUrl,
+                Content = r.Content,
+                CreatedAt = r.CreatedAt,
+                UpdatedAt = r.UpdatedAt,
+                ContainsSpoilers = r.ContainsSpoilers,
+                LikeCount = r.Likes.Count(),
+                LikedByCurrentUser = currentUserId.HasValue ? r.Likes.Any(x => x.UserId == currentUserId.Value) : null
+            }).ToListAsync(cancellationToken);
+    }
+
+    public async Task<ReviewListDto?> GetDtoByIdAsync(int reviewId, int? currentUserId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Reviews
+            .AsNoTracking()
+            .Where(r => r.Id == reviewId)
+            .Select(r => new ReviewListDto
+            {
+                Id = r.Id,
+                MediaId = r.MediaId,
+                Username = r.User.UserName!,
+                DisplayName = r.User.DisplayName,
+                ProfileImageUrl = r.User.ProfileImageUrl,
+                Content = r.Content,
+                CreatedAt = r.CreatedAt,
+                UpdatedAt = r.UpdatedAt,
+                ContainsSpoilers = r.ContainsSpoilers,
+                LikeCount = r.Likes.Count(),
+                LikedByCurrentUser = currentUserId.HasValue ? r.Likes.Any(x => x.UserId == currentUserId.Value) : null
+            }).FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task AddAsync(Review review, CancellationToken cancellationToken = default)

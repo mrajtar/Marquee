@@ -26,9 +26,9 @@ public class ReviewController : ControllerBase
     [ProducesResponseType(typeof(IReadOnlyList<ReviewListDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetByMedia(int mediaId, CancellationToken cancellationToken)
     {
-        var reviews = await _reviewService.GetByMediaIdAsync(mediaId, cancellationToken);
-        var result = _mapper.Map<IReadOnlyList<ReviewListDto>>(reviews);
-        return Ok(result);
+        var currentUserId = _currentUserService.UserId;
+        var reviews = await _reviewService.GetByMediaIdAsync(mediaId, currentUserId, cancellationToken);
+        return Ok(reviews);
     }
 
     [HttpPost("media/{mediaId:int}/reviews")]
@@ -45,7 +45,7 @@ public class ReviewController : ControllerBase
         try
         {
             var review = await _reviewService.CreateAsync(userId.Value, mediaId, dto.Content, dto.ContainsSpoilers, cancellationToken);
-            var result = _mapper.Map<ReviewListDto>(review);
+            var result = await _reviewService.GetDtoByIdAsync(review.Id, userId.Value, cancellationToken);
             return CreatedAtAction(nameof(GetByMedia), new { mediaId }, result);
         }
         catch (ArgumentException ex)
