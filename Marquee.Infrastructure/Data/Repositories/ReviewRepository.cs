@@ -47,7 +47,9 @@ public class ReviewRepository : IReviewRepository
                 UpdatedAt = r.UpdatedAt,
                 ContainsSpoilers = r.ContainsSpoilers,
                 LikeCount = r.Likes.Count(),
-                LikedByCurrentUser = currentUserId.HasValue ? r.Likes.Any(x => x.UserId == currentUserId.Value) : null
+                LikedByCurrentUser = currentUserId.HasValue ? r.Likes.Any(x => x.UserId == currentUserId.Value) : null,
+                MediaTitle = r.Media.Title,
+                MediaPosterUrl = r.Media.PosterUrl,
             }).ToListAsync(cancellationToken);
     }
 
@@ -96,7 +98,9 @@ public class ReviewRepository : IReviewRepository
                 UpdatedAt = r.UpdatedAt,
                 ContainsSpoilers = r.ContainsSpoilers,
                 LikeCount = r.Likes.Count(),
-                LikedByCurrentUser = currentUserId.HasValue ? r.Likes.Any(x => x.UserId == currentUserId.Value) : null
+                LikedByCurrentUser = currentUserId.HasValue ? r.Likes.Any(x => x.UserId == currentUserId.Value) : null,
+                MediaTitle = r.Media.Title, 
+                MediaPosterUrl = r.Media.PosterUrl,
             }).FirstOrDefaultAsync(cancellationToken);
     }
 

@@ -1,4 +1,5 @@
-﻿import { useState } from "react";
+﻿import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
     FiHeart,
     FiEye,
@@ -12,6 +13,27 @@ function ReviewCard({ review }) {
 
     return (
         <article className="review-card">
+            <Link
+                to={`/media/${review.mediaId}`}
+                className="review-media"
+            >
+                <div className="review-media-poster">
+                    {review.mediaPosterUrl ? (
+                        <img
+                            src={review.mediaPosterUrl}
+                            alt={review.mediaTitle}
+                            loading="lazy"
+                        />
+                    ) : (
+                        <div className="review-media-placeholder">
+                            No poster
+                        </div>
+                    )}
+                </div>
+
+                <strong>{review.mediaTitle}</strong>
+            </Link>
+
             <div className="review-card-header">
                 <div className="review-author">
                     <div className="review-avatar">
@@ -100,9 +122,7 @@ function ReviewCard({ review }) {
 }
 
 function formatDate(value) {
-    const date = new Date(value);
-
-    return date.toLocaleDateString(
+    return new Date(value).toLocaleDateString(
         undefined,
         {
             day: "numeric",
