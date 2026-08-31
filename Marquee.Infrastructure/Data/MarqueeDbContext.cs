@@ -20,7 +20,8 @@ public class MarqueeDbContext : IdentityDbContext<User, IdentityRole<int>, int>,
     public DbSet<Genre> Genres => Set<Genre>();
     public DbSet<Keyword> Keywords => Set<Keyword>();
     public DbSet<ReviewLike> ReviewLikes => Set<ReviewLike>();
-
+    public DbSet<MediaList> MediaLists => Set<MediaList>();
+    public DbSet<MediaListItem> MediaListItems => Set<MediaListItem>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

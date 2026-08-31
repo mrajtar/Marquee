@@ -45,6 +45,8 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IReviewLikeRepository, ReviewLikeRepository>();
 builder.Services.AddScoped<IReviewLikeService, ReviewLikeService>();
+builder.Services.AddScoped<IMediaListRepository, MediaListRepository>();
+builder.Services.AddScoped<IMediaListService, MediaListService>();
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<MediaProfile>(), typeof(MediaProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<PersonProfile>(), typeof(PersonProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<GenreProfile>(), typeof(GenreProfile));
@@ -52,6 +54,7 @@ builder.Services.AddAutoMapper(configuration => configuration.AddProfile<Keyword
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<UserProfile>(), typeof(UserProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<RatingProfile>(), typeof(RatingProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<ReviewProfile>(), typeof(ReviewProfile));
+builder.Services.AddAutoMapper(configuration => configuration.AddProfile<MediaListProfile>(), typeof(MediaListProfile));
 
 
 
