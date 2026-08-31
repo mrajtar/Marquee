@@ -13,4 +13,6 @@ public class ReviewListDto
     public bool ContainsSpoilers { get; set; }
     public int LikeCount { get; set; }
     public bool? LikedByCurrentUser { get; set; }
+    public string MediaTitle { get; set; } = null!;
+    public string? MediaPosterUrl { get; set; }
 }

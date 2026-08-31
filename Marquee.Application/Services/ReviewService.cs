@@ -27,6 +27,11 @@ public class ReviewService : IReviewService
         return await _reviewRepository.GetDtoByIdAsync(reviewId, currentUserId, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<ReviewListDto>> GetRecentAsync(int? currentUserId, int count, CancellationToken cancellationToken = default)
+    {
+        return await _reviewRepository.GetRecentAsync(currentUserId, count, cancellationToken);
+    }
+
     public async Task<Review> CreateAsync(int userId, int mediaId, string content, bool containsSpoilers, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(content))

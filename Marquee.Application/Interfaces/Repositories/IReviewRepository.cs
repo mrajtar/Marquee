@@ -9,6 +9,7 @@ public interface IReviewRepository
     Task<Review?> GetByIdWitUserAsync(int id, CancellationToken cancellationToken = default);
     Task<Review?> GetByUserAndMediaAsync(int userId, int mediaId, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<ReviewListDto>> GetByMediaIdAsync(int mediaId, int? currentUserId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<ReviewListDto>> GetRecentAsync(int? currentUserId, int count, CancellationToken cancellationToken = default);
     Task<ReviewListDto?> GetDtoByIdAsync(int reviewId, int? currentUserId, CancellationToken cancellationToken = default);
     Task AddAsync(Review review, CancellationToken cancellationToken = default);
     void Delete(Review review);

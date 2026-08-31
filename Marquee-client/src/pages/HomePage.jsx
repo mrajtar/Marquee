@@ -4,6 +4,7 @@ import PageContainer from "../components/layout/PageContainer";
 import MediaRow from "../components/media/MediaRow";
 import { getMedia } from "../api/mediaApi";
 import Hero from "../components/home/Hero.jsx";
+import RecentReviews from "../components/home/RecentReviews";
 
 function HomePage() {
     const [media, setMedia] = useState([]);
@@ -52,6 +53,8 @@ function HomePage() {
                 title="Trending"
                 media={media}
             />
+            
+            <RecentReviews />
         </PageContainer>
     );
 }

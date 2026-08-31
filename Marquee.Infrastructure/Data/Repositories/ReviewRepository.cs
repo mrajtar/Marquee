@@ -51,6 +51,34 @@ public class ReviewRepository : IReviewRepository
             }).ToListAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<ReviewListDto>> GetRecentAsync(int? currentUserId, int count, CancellationToken cancellationToken = default)
+    {
+        if (count <= 0)
+            return [];
+
+        return await _context.Reviews
+            .AsNoTracking()
+            .OrderByDescending(r => r.CreatedAt)
+            .Take(count)
+            .Select(r => new ReviewListDto
+            {
+                Id = r.Id,
+                MediaId = r.MediaId,
+                Username = r.User.UserName!,
+                DisplayName = r.User.DisplayName,
+                ProfileImageUrl = r.User.ProfileImageUrl,
+                Content = r.Content,
+                CreatedAt = r.CreatedAt,
+                UpdatedAt = r.UpdatedAt,
+                ContainsSpoilers = r.ContainsSpoilers,
+                LikeCount = r.Likes.Count,
+                LikedByCurrentUser = currentUserId.HasValue ? r.Likes.Any(x => x.UserId == currentUserId.Value) : null,
+                MediaTitle = r.Media.Title,
+                MediaPosterUrl = r.Media.PosterUrl,
+            })
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<ReviewListDto?> GetDtoByIdAsync(int reviewId, int? currentUserId, CancellationToken cancellationToken = default)
     {
         return await _context.Reviews

@@ -15,13 +15,52 @@ PUT http://localhost:5055/api/media/1
 Content-Type: application/json
 
 {
-  "title": "Inception (Extended Edition)",
-  "overview": "Updated overview for the movie.",
-  "status": 1,
-  "releaseDate": "2010-07-16T00:00:00Z"
+  "mediaType": 1,
+  "title": "Inception",
+  "overview": "A thief who steals corporate secrets through the use of dream-sharing technology.",
+  "posterUrl": "https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
+  "backdropUrl": "https://image.tmdb.org/t/p/w1280/8ZTVqvKDQ8emSGUEMjsS4yHAwrp.jpg",
+  "releaseDate": "2010-07-16T00:00:00Z",
+  "tmdbId": 27205,
+  "imdbId": "tt1375666"
 }
 ### Delete an existing Media item
-DELETE http://localhost:5055/api/media/2
+DELETE http://localhost:5055/api/media/1
 
 ### Get all Media items to verify it saved
-GET http://localhost:5055/api/media
+GET http://localhost:5055/api/media/1/details
+###
+POST http://localhost:5055/api/media/1/reviews
+Content-Type: application/json
+
+{
+  "content": "This movie is absolutely mind-bending! Christopher Nolan at his best. The visual effects are stunning and the story keeps you thinking long after it ends.",
+  "containsSpoilers": false
+}
+
+###
+POST http://localhost:5055/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "movielover",
+  "email": "movielover@example.com",
+  "password": "Password123!"
+}
+###
+POST http://localhost:5055/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "movielover",
+  "password": "Password123!"
+}
+
+### Admin login
+POST http://localhost:5055/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin123!"
+}

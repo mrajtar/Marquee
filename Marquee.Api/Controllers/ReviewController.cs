@@ -11,13 +11,11 @@ namespace Marquee.Controllers;
 public class ReviewController : ControllerBase
 {
     private readonly IReviewService _reviewService;
-    private readonly IMapper _mapper;
     private readonly ICurrentUserService _currentUserService;
 
-    public ReviewController(IReviewService reviewService, IMapper mapper, ICurrentUserService currentUserService)
+    public ReviewController(IReviewService reviewService, ICurrentUserService currentUserService)
     {
         _reviewService = reviewService;
-        _mapper = mapper;
         _currentUserService = currentUserService;
     }
 
@@ -31,6 +29,17 @@ public class ReviewController : ControllerBase
         return Ok(reviews);
     }
 
+    [HttpGet("reviews/recent")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(IReadOnlyList<ReviewListDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetRecent([FromQuery] int count = 10, CancellationToken cancellationToken = default)
+    {
+        count = Math.Clamp(count, 1, 20);
+        var currentUserId = _currentUserService.UserId;
+        var reviews = await _reviewService.GetRecentAsync(currentUserId, count, cancellationToken);
+        return Ok(reviews);
+    }
+    
     [HttpPost("media/{mediaId:int}/reviews")]
     [Authorize]
     [ProducesResponseType(typeof(ReviewListDto), StatusCodes.Status201Created)]
