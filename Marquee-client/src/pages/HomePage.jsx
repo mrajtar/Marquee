@@ -3,12 +3,14 @@
 import PageContainer from "../components/layout/PageContainer";
 import MediaRow from "../components/media/MediaRow";
 import { getMedia } from "../api/mediaApi";
+import Hero from "../components/home/Hero.jsx";
 
 function HomePage() {
     const [media, setMedia] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const featuredMedia = media[0];
+    
     useEffect(() => {
         async function loadMedia() {
             try {
@@ -44,15 +46,7 @@ function HomePage() {
 
     return (
         <PageContainer>
-            <section className="home-intro">
-                <h1>Discover something worth watching.</h1>
-
-                <p>
-                    Explore movies and TV shows,
-                    discover what people are watching,
-                    and find your next favorite.
-                </p>
-            </section>
+            <Hero media={featuredMedia} />
 
             <MediaRow
                 title="Trending"

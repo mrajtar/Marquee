@@ -130,6 +130,33 @@ a {
     border-radius: 50%;
     background: var(--color-surface);
 }
+.navbar-icon-button {
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+    place-items: center;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: transparent;
+    color: var(--color-text-secondary);
+
+    transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
+}
+
+.navbar-icon-button:hover {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+.navbar-icon-button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
 
 @media (max-width: 700px) {
     .navbar-links {
@@ -143,8 +170,8 @@ a {
 }
 .media-card {
     display: block;
-    min-width: 170px;
-    max-width: 190px;
+    flex: 0 0 180px;
+    width: 180px;
 }
 
 .media-card-poster {
@@ -232,14 +259,10 @@ a {
 
 .media-row {
     display: flex;
-    gap: 18px;
-
+    gap: 20px;
     overflow-x: auto;
-
-    padding: 4px 4px 14px;
+    padding: 4px 4px 16px;
     margin: 0 -4px;
-
-    scrollbar-width: thin;
 }
 
 .media-row::-webkit-scrollbar {
@@ -278,4 +301,136 @@ a {
 
     font-size: 1.05rem;
     line-height: 1.7;
+}
+.hero {
+    position: relative;
+
+    min-height: 520px;
+
+    overflow: hidden;
+    border-radius: var(--radius-large);
+
+    background: var(--color-surface);
+}
+
+.hero-backdrop {
+    position: absolute;
+    inset: 0;
+}
+
+.hero-backdrop img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+
+    background:
+            linear-gradient(
+                    90deg,
+                    rgba(39, 47, 56, 0.98) 0%,
+                    rgba(39, 47, 56, 0.82) 32%,
+                    rgba(39, 47, 56, 0.28) 70%,
+                    rgba(39, 47, 56, 0.55) 100%
+            ),
+            linear-gradient(
+                    0deg,
+                    rgba(39, 47, 56, 1) 0%,
+                    rgba(39, 47, 56, 0) 45%
+            );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+
+    min-height: 520px;
+
+    width: min(600px, 70%);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    padding: 56px;
+}
+
+.hero-eyebrow {
+    margin: 0 0 10px;
+
+    color: var(--color-accent);
+
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+}
+
+.hero-content h1 {
+    margin: 0;
+
+    color: var(--color-text-primary);
+
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1;
+    font-weight: 650;
+}
+
+.hero-meta {
+    display: flex;
+    gap: 14px;
+
+    margin-top: 18px;
+
+    color: var(--color-text-secondary);
+}
+
+.hero-button {
+    align-self: flex-start;
+
+    margin-top: 28px;
+    padding: 11px 18px;
+
+    border-radius: var(--radius-small);
+
+    background: var(--color-accent);
+    color: #20242A;
+
+    font-weight: 600;
+
+    transition:
+            transform 0.2s ease,
+            filter 0.2s ease;
+}
+
+.hero-button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+}
+
+@media (max-width: 700px) {
+    .hero {
+        min-height: 440px;
+    }
+
+    .hero-content {
+        min-height: 440px;
+        width: 100%;
+        padding: 28px;
+    }
+
+    .hero-overlay {
+        background:
+                linear-gradient(
+                        0deg,
+                        rgba(39, 47, 56, 0.98) 0%,
+                        rgba(39, 47, 56, 0.55) 55%,
+                        rgba(39, 47, 56, 0.15) 100%
+                );
+    }
 }

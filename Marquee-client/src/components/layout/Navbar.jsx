@@ -1,5 +1,6 @@
 ﻿import { Link } from "react-router-dom";
 import { FiUser, FiSearch } from "react-icons/fi";
+
 function Navbar() {
     return (
         <header className="navbar">
@@ -16,7 +17,7 @@ function Navbar() {
 
                 <div className="navbar-actions">
                     <button
-                        className="navbar-search"
+                        className="navbar-icon-button"
                         type="button"
                         aria-label="Search"
                         title="Search"
@@ -25,12 +26,12 @@ function Navbar() {
                     </button>
 
                     <button
-                        className="navbar-user"
+                        className="navbar-icon-button"
                         type="button"
                         aria-label="Account"
                         title="Account"
                     >
-                        <FiUser size={24} />
+                        <FiUser size={22} />
                     </button>
                 </div>
             </div>
