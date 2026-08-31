@@ -1,6 +1,5 @@
 ﻿using Marquee.Application.Interfaces;
 using Marquee.Domain.Entities;
-using Marquee.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +19,6 @@ public class MarqueeDbContext : IdentityDbContext<User, IdentityRole<int>, int>,
     public DbSet<Person> People => Set<Person>();
     public DbSet<Genre> Genres => Set<Genre>();
     public DbSet<Keyword> Keywords => Set<Keyword>();
-    public DbSet<User> Users => Set<User>();
     public DbSet<ReviewLike> ReviewLikes => Set<ReviewLike>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

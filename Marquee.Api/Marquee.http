@@ -5,7 +5,7 @@ POST http://localhost:5055/api/media
 Content-Type: application/json
 
 {
-  "mediaType": 0,
+  "mediaType": 1,
   "Title": "Inception",
   "Overview": "A thief who steals corporate secrets through the use of dream-sharing technology."
 }

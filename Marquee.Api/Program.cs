@@ -91,6 +91,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+const string frontendPolicy = "Frontend";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(frontendPolicy, policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
@@ -103,6 +115,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(frontendPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 
