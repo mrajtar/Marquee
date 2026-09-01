@@ -26,9 +26,8 @@ public class MediaController : ControllerBase
     [ProducesResponseType(typeof(IReadOnlyList<MediaListDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var media = await _mediaService.GetAllAsync(cancellationToken);
-        var result = _mapper.Map<IReadOnlyList<MediaListDto>>(media);
-        return Ok(result);
+        var media = await _mediaService.GetAllAsListAsync(cancellationToken);
+        return Ok(media);
     }
 
     [HttpGet("{id:int}")]

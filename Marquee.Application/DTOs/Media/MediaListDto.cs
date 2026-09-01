@@ -9,5 +9,7 @@ public class MediaListDto
     public string? PosterUrl { get; set; }
     public string? BackdropUrl { get; set; }
     public DateTime? ReleaseDate { get; set; }
+    public double? AverageRating { get; set; }
+    public int RatingCount { get; set; }
     public MediaType MediaType { get; set; }
 }

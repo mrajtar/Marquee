@@ -69,3 +69,14 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:5055/api/reviews/recent
+
+###
+PUT http://localhost:5055/api/media/1/rating
+Content-Type: application/json
+
+{
+  "value": 20
+}
+###
+GET http://localhost:5055/api/media/1/rating
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwianRpIjoiOGVjY2YxM2YtNzg2Zi00Y2I1LWFkNjQtM2NkZjJlNGFhZGE2IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6ImFkbWluIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3ODgyNzE5NDMsImlzcyI6Ik1hcnF1ZWUiLCJhdWQiOiJNYXJxdWVlLkNsaWVudCJ9.4vpnBb_igri-ONQKU_vpAgAN7-sLHoxcEkPHfu6Mghg

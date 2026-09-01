@@ -1,4 +1,5 @@
-﻿using Marquee.Application.Interfaces;
+﻿using Marquee.Application.DTOs.Media;
+using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Repositories;
 using Marquee.Application.Interfaces.Services;
 using Marquee.Domain.Entities;
@@ -28,6 +29,11 @@ public class MediaService : IMediaService
     public async Task<IReadOnlyList<Media>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _mediaRepository.GetAllAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<MediaListDto>> GetAllAsListAsync(CancellationToken cancellationToken = default)
+    {
+        return await _mediaRepository.GetAllAsListAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<Media>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default)

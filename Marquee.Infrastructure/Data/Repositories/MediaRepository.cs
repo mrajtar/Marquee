@@ -1,4 +1,5 @@
-﻿using Marquee.Application.Interfaces.Repositories;
+﻿using Marquee.Application.DTOs.Media;
+using Marquee.Application.Interfaces.Repositories;
 using Marquee.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +38,27 @@ public class MediaRepository : IMediaRepository
     {
         return await _context.Media
             .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<MediaListDto>> GetAllAsListAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Media
+            .AsNoTracking()
+            .OrderBy(m => m.Title)
+            .Select(m => new MediaListDto
+            {
+                Id = m.Id,
+                Title = m.Title,
+                PosterUrl = m.PosterUrl,
+                BackdropUrl = m.BackdropUrl,
+                ReleaseDate = m.ReleaseDate,
+                AverageRating = m.Ratings
+                    .Select(r => (double?)r.Value)
+                    .Average(),
+                RatingCount = m.Ratings.Count,
+                MediaType = m.Type
+            })
             .ToListAsync(cancellationToken);
     }
 

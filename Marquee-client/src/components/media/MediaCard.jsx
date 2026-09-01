@@ -1,6 +1,16 @@
 ﻿import { Link } from "react-router-dom";
+import { FiStar } from "react-icons/fi";
 
 function MediaCard({ media }) {
+    const year = media.releaseDate
+        ? new Date(media.releaseDate).getFullYear()
+        : null;
+
+    const averageStars =
+        media.averageRating != null
+            ? media.averageRating / 2
+            : null;
+    
     return (
         <Link
             to={`/media/${media.id}`}
@@ -18,16 +28,25 @@ function MediaCard({ media }) {
                         No poster
                     </div>
                 )}
+
+                {averageStars != null && (
+                    <div className="media-card-rating">
+                        <FiStar
+                            size={13}
+                            fill="currentColor"
+                        />
+
+                        {averageStars.toFixed(1)}
+                    </div>
+                )}
             </div>
 
             <div className="media-card-info">
                 <h3>{media.title}</h3>
 
-                {media.releaseDate && (
+                {year && (
                     <span>
-                        {new Date(
-                            media.releaseDate
-                        ).getFullYear()}
+                        {year}
                     </span>
                 )}
             </div>

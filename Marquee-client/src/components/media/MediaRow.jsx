@@ -4,7 +4,10 @@ function MediaRow({ title, media }) {
     return (
         <section className="media-section">
             <div className="media-section-header">
-                <h2>{title}</h2>
+                <div className="media-section-title">
+                    <span />
+                    <h2>{title}</h2>
+                </div>
             </div>
 
             <div className="media-row">
