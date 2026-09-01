@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
     FiHeart,
     FiEye,
-    FiEyeOff
+    FiEyeOff, FiArrowRight
 } from "react-icons/fi";
 import { likeReview, unlikeReview } from "../../api/reviewLikeApi.js";
 import { useAuth } from "../../context/AuthContext";
@@ -17,6 +17,8 @@ function ReviewCard({ review, showMedia = true }) {
     const [liked, setLiked] = useState(review.likedByCurrentUser === true);
     const [likeCount, setLikeCount] = useState(review.likeCount);
     const [likeLoading, setLikeLoading] = useState(false);
+    
+    const isLong = review.content.length > 250;
 
     async function handleLike() {
         if (!isAuthenticated) {
@@ -143,8 +145,20 @@ function ReviewCard({ review, showMedia = true }) {
                         </button>
                     </div>
                 ) : (
-                    <p>{review.content}</p>
-                )}
+                    <>
+                        <p className={isLong ? "review-text-clamped" : ""}>
+                            {review.content}
+                        </p>
+                        {isLong && (
+                            <Link
+                                to={`/reviews/${review.id}`}
+                                className="keep-reading-link"
+                            >
+                                Keep reading <FiArrowRight size={14} />
+                            </Link>
+                        )}
+                    </>
+                    )}
             </div>
 
             <div className="review-card-footer">

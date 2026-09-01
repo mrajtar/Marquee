@@ -27,3 +27,6 @@ export async function createReview(
         }
     );
 }
+export async function getReviewById(reviewId) {
+    return apiRequest(`/api/reviews/${reviewId}`);
+}

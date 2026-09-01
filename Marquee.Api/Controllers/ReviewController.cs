@@ -18,7 +18,22 @@ public class ReviewController : ControllerBase
         _reviewService = reviewService;
         _currentUserService = currentUserService;
     }
+    
+    [HttpGet("reviews/{reviewId:int}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ReviewListDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int reviewId, CancellationToken cancellationToken)
+    {
+        var currentUserId = _currentUserService.UserId;
+        var review = await _reviewService.GetDtoByIdAsync(reviewId, currentUserId, cancellationToken);
 
+        if (review is null)
+            return NotFound(new { message = $"Review with ID {reviewId} not found." });
+
+        return Ok(review);
+    }
+    
     [HttpGet("media/{mediaId:int}/reviews")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<ReviewListDto>), StatusCodes.Status200OK)]

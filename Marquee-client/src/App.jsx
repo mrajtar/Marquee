@@ -4,6 +4,7 @@ import Navbar from "./components/layout/Navbar";
 import HomePage from "./pages/HomePage";
 import MediaPage from "./pages/MediaPage";
 import LoginPage from "./pages/LoginPage";
+import ReviewDetailPage from "./pages/ReviewDetailPage";
 
 function App() {
     return (
@@ -24,6 +25,11 @@ function App() {
                 <Route
                     path="/login"
                     element={<LoginPage />}
+                />
+                
+                <Route
+                    path="/reviews/:reviewId"
+                    element={<ReviewDetailPage />}
                 />
             </Routes>
         </>
