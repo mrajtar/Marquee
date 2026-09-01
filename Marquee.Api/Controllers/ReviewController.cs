@@ -45,6 +45,7 @@ public class ReviewController : ControllerBase
     [ProducesResponseType(typeof(ReviewListDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Add(int mediaId, [FromBody] CreateReviewDto dto, CancellationToken cancellationToken)
     {
         var userId = _currentUserService.UserId;
@@ -54,12 +55,15 @@ public class ReviewController : ControllerBase
         try
         {
             var review = await _reviewService.CreateAsync(userId.Value, mediaId, dto.Content, dto.ContainsSpoilers, cancellationToken);
-            var result = await _reviewService.GetDtoByIdAsync(review.Id, userId.Value, cancellationToken);
-            return CreatedAtAction(nameof(GetByMedia), new { mediaId }, result);
+            return CreatedAtAction(nameof(GetByMedia), new { mediaId }, review);
         }
         catch (ArgumentException ex)
         {
             return BadRequest(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
         }
     }
 

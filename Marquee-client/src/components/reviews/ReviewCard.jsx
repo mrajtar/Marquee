@@ -1,18 +1,69 @@
-﻿import { Link } from "react-router-dom";
+﻿import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
     FiHeart,
     FiEye,
     FiEyeOff
 } from "react-icons/fi";
+import { likeReview, unlikeReview } from "../../api/reviewLikeApi.js";
+import { useAuth } from "../../context/AuthContext";
 
-function ReviewCard({ review }) {
+function ReviewCard({ review, showMedia = true }) {
     const [showSpoiler, setShowSpoiler] = useState(
         !review.containsSpoilers
     );
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+    const [liked, setLiked] = useState(review.likedByCurrentUser === true);
+    const [likeCount, setLikeCount] = useState(review.likeCount);
+    const [likeLoading, setLikeLoading] = useState(false);
 
+    async function handleLike() {
+        if (!isAuthenticated) {
+            navigate("/login");
+            return;
+        }
+
+        if (likeLoading) {
+            return;
+        }
+
+        const previousLiked = liked;
+        const previousLikeCount = likeCount;
+
+        const nextLiked = !liked;
+        
+        setLiked(nextLiked);
+        setLikeCount(
+            nextLiked
+                ? previousLikeCount + 1
+                : previousLikeCount - 1
+        );
+
+        setLikeLoading(true);
+
+        try {
+            if (nextLiked) {
+                await likeReview(review.id);
+            } else {
+                await unlikeReview(review.id);
+            }
+        } catch (error) {
+            console.error(
+                "Failed to update review like:",
+                error
+            );
+            
+            setLiked(previousLiked);
+            setLikeCount(previousCount);
+        } finally {
+            setLikeLoading(false);
+        }
+    }
+    
     return (
         <article className="review-card">
+            {showMedia && (
             <Link
                 to={`/media/${review.mediaId}`}
                 className="review-media"
@@ -33,7 +84,7 @@ function ReviewCard({ review }) {
 
                 <strong>{review.mediaTitle}</strong>
             </Link>
-
+            )}
             <div className="review-card-header">
                 <div className="review-author">
                     <div className="review-avatar">
@@ -100,21 +151,27 @@ function ReviewCard({ review }) {
                 <button
                     type="button"
                     className={
-                        review.likedByCurrentUser
+                        liked
                             ? "review-like liked"
                             : "review-like"
+                    }
+                    onClick={handleLike}
+                    disabled={likeLoading}
+                    aria-label={liked
+                                ? "Unlike review"
+                                : "Like review"
                     }
                 >
                     <FiHeart
                         size={17}
                         fill={
-                            review.likedByCurrentUser
+                            liked
                                 ? "currentColor"
                                 : "none"
                         }
                     />
 
-                    <span>{review.likeCount}</span>
+                    <span>{likeCount}</span>
                 </button>
             </div>
         </article>

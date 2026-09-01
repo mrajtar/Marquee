@@ -10,11 +10,13 @@ public class ReviewService : IReviewService
 {
     private readonly IReviewRepository _reviewRepository;
     private readonly IUnitOfWork  _unitOfWork;
+    private readonly IMediaRepository _mediaRepository;
 
-    public ReviewService(IReviewRepository reviewRepository, IUnitOfWork unitOfWork)
+    public ReviewService(IReviewRepository reviewRepository, IUnitOfWork unitOfWork, IMediaRepository mediaRepository)
     {
         _reviewRepository = reviewRepository;
         _unitOfWork = unitOfWork;
+        _mediaRepository = mediaRepository;
     }
     
     public async Task<IReadOnlyList<ReviewListDto>> GetByMediaIdAsync(int mediaId, int? currentUserId, CancellationToken cancellationToken = default)
@@ -32,15 +34,19 @@ public class ReviewService : IReviewService
         return await _reviewRepository.GetRecentAsync(currentUserId, count, cancellationToken);
     }
 
-    public async Task<Review> CreateAsync(int userId, int mediaId, string content, bool containsSpoilers, CancellationToken cancellationToken = default)
+    public async Task<ReviewListDto> CreateAsync(int userId, int mediaId, string content, bool containsSpoilers, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(content))
         {
             throw new ArgumentException("Review cannot be empty", nameof(content));
         }
+        
+        var media = await _mediaRepository.GetByIdAsync(mediaId, cancellationToken);
+        if (media is null)
+            throw new KeyNotFoundException($"Media with ID {mediaId} was not found.");
 
         content = content.Trim();
-
+        
         var review = new Review
         {
             UserId = userId,
@@ -51,7 +57,10 @@ public class ReviewService : IReviewService
         };
         await _reviewRepository.AddAsync(review, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return review;
+        
+        var result = await _reviewRepository.GetDtoByIdAsync(review.Id, userId, cancellationToken);
+        
+        return result ?? throw new InvalidOperationException("Review could not be retrieved.");
     }
 
     public async Task UpdateAsync(int userId, int reviewId, string content, bool containsSpoilers, CancellationToken cancellationToken = default)

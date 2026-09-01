@@ -1,14 +1,20 @@
 ﻿import { apiRequest } from "./client";
 
-export async function getRecentReviews(count = 10) {
+export async function likeReview(reviewId) {
     return apiRequest(
-        `/api/reviews/recent?count=${count}`
+        `/api/reviews/${reviewId}/like`,
+        {
+            method: "PUT"
+        }
     );
 }
 
-export async function getReviewsByMediaId(mediaId) {
+export async function unlikeReview(reviewId) {
     return apiRequest(
-        `/api/media/${mediaId}/reviews`
+        `/api/reviews/${reviewId}/like`,
+        {
+            method: "DELETE"
+        }
     );
 }
 export async function createReview(

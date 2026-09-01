@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import PageContainer from "../components/layout/PageContainer";
 import MediaHero from "../components/media/MediaHero";
 import { getMediaDetails } from "../api/mediaApi";
+import MediaReviews from "../components/media/MediaReviews";
 
 function MediaPage() {
     const { id } = useParams();
@@ -59,6 +60,12 @@ function MediaPage() {
 
             <PageContainer>
                 <MediaInformation media={media} />
+                <MediaReviews
+                    mediaId={media.id}
+                    reviewCount={
+                        media.reviewCount
+                    }
+                />
             </PageContainer>
         </div>
     );
