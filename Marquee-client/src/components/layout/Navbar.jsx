@@ -25,14 +25,14 @@ function Navbar() {
                         <FiSearch size={20} />
                     </button>
 
-                    <button
+                    <Link
+                        to="/login"
                         className="navbar-icon-button"
-                        type="button"
                         aria-label="Account"
                         title="Account"
                     >
                         <FiUser size={22} />
-                    </button>
+                    </Link>
                 </div>
             </div>
         </header>

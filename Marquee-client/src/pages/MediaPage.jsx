@@ -2,6 +2,7 @@
 import { useParams } from "react-router-dom";
 
 import PageContainer from "../components/layout/PageContainer";
+import MediaHero from "../components/media/MediaHero";
 import { getMediaDetails } from "../api/mediaApi";
 
 function MediaPage() {
@@ -53,11 +54,34 @@ function MediaPage() {
     }
 
     return (
-        <PageContainer>
-            <h1>{media.title}</h1>
+        <div className="media-page">
+            <MediaHero media={media} />
 
-            <p>{media.overview}</p>
-        </PageContainer>
+            <PageContainer>
+                <MediaInformation media={media} />
+            </PageContainer>
+        </div>
+    );
+}
+
+function MediaInformation({ media }) {
+    return (
+        <section className="media-information">
+            <section className="media-info-section">
+                <h2>Genres</h2>
+
+                <div className="tag-list">
+                    {media.genres?.map((genre) => (
+                        <span
+                            key={genre.id}
+                            className="media-tag"
+                        >
+                            {genre.name}
+                        </span>
+                    ))}
+                </div>
+            </section>
+        </section>
     );
 }
 
