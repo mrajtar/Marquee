@@ -1,5 +1,5 @@
 ﻿import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 
 import { useAuth } from "../context/AuthContext";
@@ -7,6 +7,9 @@ import { loginUser } from "../api/authApi";
 
 function LoginPage() {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || "/";
 
     const { login } = useAuth();
 
@@ -36,7 +39,7 @@ function LoginPage() {
 
             login(data.accessToken);
 
-            navigate("/");
+            navigate(from, { replace: true });
         } catch (error) {
             console.error("Login failed:", error);
             setError(

@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import ReviewDetailPage from "./pages/ReviewDetailPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
     return (
@@ -40,7 +41,7 @@ function App() {
                 />
                 <Route
                     path="/profile"
-                    element={<ProfilePage />}
+                    element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>}
                 />
             </Routes>
         </>
