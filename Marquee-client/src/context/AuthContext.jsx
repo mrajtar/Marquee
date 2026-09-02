@@ -1,4 +1,5 @@
-﻿import { createContext, useContext, useState } from "react";
+﻿import { createContext, useContext, useState, useEffect } from "react";
+import { getMe } from "../api/userApi";
 
 const AuthContext = createContext(null);
 
@@ -6,7 +7,34 @@ function AuthProvider({ children }) {
     const [token, setToken] = useState(
         localStorage.getItem("accessToken")
     );
-
+    
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+        async function loadUser() {
+            if (!token) {
+                setUser(null);
+                setLoading(false);
+                return;
+            }
+            try {
+                const currentUser = await getMe();
+                setUser(currentUser);
+            }
+            catch (error) {
+                console.log("Failed to load current user:", error);
+                localStorage.removeItem("accessToken");
+                setToken(null);
+                setUser(null);
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+        loadUser();
+    }, [token]);
+    
     function login(accessToken) {
         localStorage.setItem(
             "accessToken",
@@ -18,15 +46,17 @@ function AuthProvider({ children }) {
 
     function logout() {
         localStorage.removeItem("accessToken");
-
         setToken(null);
+        setUser(null);
     }
 
     return (
         <AuthContext.Provider
             value={{
                 token,
-                isAuthenticated: Boolean(token),
+                user,
+                loading,
+                isAuthenticated: Boolean(token && user),
                 login,
                 logout
             }}

@@ -1381,3 +1381,25 @@ a {
 .auth-switch a:hover {
     text-decoration: underline;
 }
+.profile-page {
+    max-width: 700px;
+}
+
+.profile-page h1 {
+    margin: 0;
+
+    color: var(--color-text-primary);
+}
+
+.profile-page p {
+    margin: 12px 0 24px;
+
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+}
+
+.profile-page .secondary-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}

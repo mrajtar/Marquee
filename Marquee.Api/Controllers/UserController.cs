@@ -38,6 +38,28 @@ public class UserController : ControllerBase
         return Ok(_mapper.Map<UserDetailsDto>(user));
     }
 
+    [HttpGet("me")]
+    [Authorize]
+    [ProducesResponseType(typeof(UserDetailsDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
+    {
+        var userId = _currentUserService.UserId;
+
+        if (userId == null)
+            return Unauthorized();
+        
+        var user  = await _userService.GetByIdAsync(userId.Value, cancellationToken);
+        
+        if (user == null)
+        {
+            return NotFound(new { message = $"Current user was not found." });
+        }
+        
+        return Ok(_mapper.Map<UserDetailsDto>(user));
+    }
+
     [HttpPut("me")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

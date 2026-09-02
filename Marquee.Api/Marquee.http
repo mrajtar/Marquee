@@ -80,3 +80,7 @@ Content-Type: application/json
 ###
 GET http://localhost:5055/api/media/1/rating
 Authorization:
+
+###
+GET http://localhost:5055/api/users/me
+Authorization:

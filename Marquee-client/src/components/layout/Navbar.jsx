@@ -1,7 +1,10 @@
 ﻿import { Link } from "react-router-dom";
 import { FiUser, FiSearch } from "react-icons/fi";
+import { useAuth } from "../../context/AuthContext"
 
 function Navbar() {
+    const { isAuthenticated, user } = useAuth();
+    
     return (
         <header className="navbar">
             <div className="navbar-inner">
@@ -26,10 +29,10 @@ function Navbar() {
                     </button>
 
                     <Link
-                        to="/login"
+                        to={isAuthenticated ? "/profile" : "/login"}
                         className="navbar-icon-button"
                         aria-label="Account"
-                        title="Account"
+                        title={isAuthenticated ? user?.displayName || user.userName || "Profile" : "Log in"}
                     >
                         <FiUser size={22} />
                     </Link>
