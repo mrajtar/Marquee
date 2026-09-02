@@ -26,7 +26,7 @@ function AuthProvider({ children }) {
         <AuthContext.Provider
             value={{
                 token,
-                isAuthenticated: token !== null,
+                isAuthenticated: Boolean(token),
                 login,
                 logout
             }}

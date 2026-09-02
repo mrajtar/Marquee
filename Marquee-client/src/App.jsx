@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import MediaPage from "./pages/MediaPage";
 import LoginPage from "./pages/LoginPage";
 import ReviewDetailPage from "./pages/ReviewDetailPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
     return (
@@ -30,6 +31,11 @@ function App() {
                 <Route
                     path="/reviews/:reviewId"
                     element={<ReviewDetailPage />}
+                />
+                
+                <Route
+                    path="/register"
+                    element={<RegisterPage />}
                 />
             </Routes>
         </>

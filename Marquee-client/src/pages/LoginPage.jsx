@@ -1,5 +1,6 @@
 ﻿import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { FiLogIn } from "react-icons/fi";
 
 import { useAuth } from "../context/AuthContext";
 import { loginUser } from "../api/authApi";
@@ -37,6 +38,7 @@ function LoginPage() {
 
             navigate("/");
         } catch (error) {
+            console.error("Login failed:", error);
             setError(
                 "Invalid username or password."
             );
@@ -48,11 +50,16 @@ function LoginPage() {
     return (
         <main className="auth-page">
             <div className="auth-card">
-                <h1>Log in</h1>
-
-                <form onSubmit={handleSubmit}>
+                <div className="auth-heading">
+                    <FiLogIn size={22}/>
+                    <h1>Log in</h1>
+                </div>
+                <p className="auth-description">
+                    Sign in to rate movies, write reviews, create lists and more.
+                </p>
+                <form className="auth-form" onSubmit={handleSubmit}>
                     <label>
-                        Username
+                        <span>Username</span>
 
                         <input
                             type="text"
@@ -62,12 +69,13 @@ function LoginPage() {
                                     event.target.value
                                 )
                             }
+                            autoComplete="username"
                             required
                         />
                     </label>
 
                     <label>
-                        Password
+                        <span>Password</span>
 
                         <input
                             type="password"
@@ -77,6 +85,7 @@ function LoginPage() {
                                     event.target.value
                                 )
                             }
+                            autoComplete="current-password"
                             required
                         />
                     </label>
@@ -89,6 +98,7 @@ function LoginPage() {
 
                     <button
                         type="submit"
+                        className="primary-button auth-submit"
                         disabled={loading}
                     >
                         {loading
@@ -96,6 +106,12 @@ function LoginPage() {
                             : "Log in"}
                     </button>
                 </form>
+            <p className="auth-switch">
+                Don't have an account?{" "}
+                <Link to="/register">
+                    Register
+                </Link>
+            </p>
             </div>
         </main>
     );
