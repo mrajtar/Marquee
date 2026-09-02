@@ -8,6 +8,8 @@ import ReviewDetailPage from "./pages/ReviewDetailPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ListsPage from "./pages/ListsPage.jsx";
+import ListDetailPage from "./pages/ListsDetailPage.jsx";
 
 function App() {
     return (
@@ -43,6 +45,14 @@ function App() {
                     path="/profile"
                     element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>}
                 />
+                <Route
+                    path="/lists"
+                    element={<ProtectedRoute> <ListsPage /> </ProtectedRoute>}
+                />
+                <Route
+                    path="/lists/:id"
+                    element={<ListDetailPage />}
+                    />
             </Routes>
         </>
     );
