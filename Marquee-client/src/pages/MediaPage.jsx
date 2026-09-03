@@ -1,13 +1,13 @@
-﻿import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+﻿import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 
 import PageContainer from "../components/layout/PageContainer";
 import MediaHero from "../components/media/MediaHero";
-import { getMediaDetails } from "../api/mediaApi";
+import {getMediaDetails} from "../api/mediaApi";
 import MediaReviews from "../components/media/MediaReviews";
 
 function MediaPage() {
-    const { id } = useParams();
+    const {id} = useParams();
 
     const [media, setMedia] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -56,10 +56,10 @@ function MediaPage() {
 
     return (
         <div className="media-page">
-            <MediaHero media={media} />
+            <MediaHero media={media}/>
 
             <PageContainer>
-                <MediaInformation media={media} />
+                <MediaInformation media={media}/>
                 <MediaReviews
                     mediaId={media.id}
                     reviewCount={
@@ -71,7 +71,7 @@ function MediaPage() {
     );
 }
 
-function MediaInformation({ media }) {
+function MediaInformation({media}) {
     return (
         <section className="media-information">
             <section className="media-info-section">

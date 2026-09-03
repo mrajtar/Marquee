@@ -1,4 +1,5 @@
-﻿using Marquee.Application.Interfaces.Repositories;
+﻿using Marquee.Application.DTOs.MediaList;
+using Marquee.Application.Interfaces.Repositories;
 using Marquee.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,15 +25,6 @@ public class MediaListRepository : IMediaListRepository
             .Include(ml => ml.Items)
                 .ThenInclude(mli => mli.Media)
             .FirstOrDefaultAsync(ml => ml.Id == id, cancellationToken);
-    }
-
-    public async Task<IReadOnlyList<MediaList>> GetByUserIdAsync(int userId, CancellationToken cancellationToken = default)
-    {
-        return await _context.MediaLists
-            .AsNoTracking()
-            .Where(ml => ml.UserId == userId)
-            .OrderBy(ml => ml.CreatedAt)
-            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> ExistsAsync(int userId, string name, CancellationToken cancellationToken = default)
@@ -70,5 +62,25 @@ public class MediaListRepository : IMediaListRepository
     {
         return await _context.MediaListItems
             .FirstOrDefaultAsync(mli => mli.MediaListId == mediaListId && mli.MediaId == mediaId, cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<MediaListDto>> GetUserListDtosAsync(int userId, int? mediaId, CancellationToken cancellationToken = default)
+    {
+        return await _context.MediaLists
+            .AsNoTracking()
+            .Where(ml => ml.UserId == userId)
+            .OrderBy(ml => ml.CreatedAt)
+            .Select(ml => new MediaListDto
+            {
+                Id = ml.Id,
+                Name = ml.Name,
+                Description = ml.Description,
+                IsPublic = ml.IsPublic,
+                CreatedAt = ml.CreatedAt,
+                UpdatedAt = ml.UpdatedAt,
+                ItemCount = ml.Items.Count(),
+                ContainsMedia = mediaId.HasValue && ml.Items.Any(i => i.MediaId == mediaId.Value)
+            })
+            .ToListAsync(cancellationToken);
     }
 }

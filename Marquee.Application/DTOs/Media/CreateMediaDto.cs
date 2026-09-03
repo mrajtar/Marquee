@@ -15,7 +15,7 @@ public class CreateMediaDto
     [StringLength(500)]
     public string? PosterUrl { get; set; }
     [StringLength(500)]
-    public string? BackropUrl  { get; set; }
+    public string? BackdropUrl  { get; set; }
     public Status Status { get; set; }
     public DateTime? ReleaseDate { get; set; }
     public int? TmdbId { get; set; }

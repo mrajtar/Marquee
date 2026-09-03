@@ -29,14 +29,13 @@ public class MediaListController : ControllerBase
     [Authorize]
     [ProducesResponseType(typeof(IReadOnlyList<MediaListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetMyLists(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetMyLists([FromQuery] int? mediaId, CancellationToken cancellationToken)
     {
         var userId = _currentUserService.UserId;
         if (userId is null)
             return Unauthorized();
         
-        var lists = await _mediaListService.GetUserListsAsync(userId.Value, cancellationToken);
-        var result = _mapper.Map<IReadOnlyList<MediaListDto>>(lists);
+        var result = await _mediaListService.GetUserListsAsync(userId.Value, mediaId, cancellationToken);
         return Ok(result);
     }
 

@@ -1,19 +1,7 @@
-﻿import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import {
-    FiPlus,
-    FiEdit2,
-    FiTrash2,
-    FiLock,
-    FiGlobe,
-    FiList,
-} from "react-icons/fi";
-import {
-    getMyLists,
-    createList,
-    updateList,
-    deleteList,
-} from "../api/mediaListApi";
+﻿import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import {FiEdit2, FiGlobe, FiList, FiLock, FiPlus, FiTrash2,} from "react-icons/fi";
+import {createList, deleteList, getMyLists, updateList,} from "../api/mediaListApi";
 
 function ListsPage() {
     const [lists, setLists] = useState([]);
@@ -22,6 +10,7 @@ function ListsPage() {
 
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [editingList, setEditingList] = useState(null);
+
 
     async function loadLists() {
         try {
@@ -122,7 +111,7 @@ function ListsPage() {
                         setShowCreateForm(true);
                     }}
                 >
-                    <FiPlus size={18} />
+                    <FiPlus size={18}/>
                     Create list
                 </button>
             </div>
@@ -136,7 +125,7 @@ function ListsPage() {
             {lists.length === 0 ? (
                 <section className="lists-empty">
                     <div className="lists-empty-icon">
-                        <FiList size={34} />
+                        <FiList size={34}/>
                     </div>
 
                     <h2>No lists yet</h2>
@@ -151,7 +140,7 @@ function ListsPage() {
                         type="button"
                         onClick={() => setShowCreateForm(true)}
                     >
-                        <FiPlus size={18} />
+                        <FiPlus size={18}/>
                         Create your first list
                     </button>
                 </section>
@@ -164,7 +153,7 @@ function ListsPage() {
                                 className="list-card-main"
                             >
                                 <div className="list-card-icon">
-                                    <FiList size={23} />
+                                    <FiList size={23}/>
                                 </div>
 
                                 <div className="list-card-content">
@@ -210,7 +199,7 @@ function ListsPage() {
                                         setEditingList(list);
                                     }}
                                 >
-                                    <FiEdit2 size={16} />
+                                    <FiEdit2 size={16}/>
                                 </button>
 
                                 <button
@@ -220,7 +209,7 @@ function ListsPage() {
                                     title="Delete list"
                                     onClick={() => handleDelete(list)}
                                 >
-                                    <FiTrash2 size={16} />
+                                    <FiTrash2 size={16}/>
                                 </button>
                             </div>
                         </article>
@@ -254,16 +243,7 @@ function ListsPage() {
     );
 }
 
-function ListFormModal({
-                           title,
-                           initialValues = {
-                               name: "",
-                               description: "",
-                               isPublic: true,
-                           },
-                           onClose,
-                           onSubmit,
-                       }) {
+function ListFormModal({title, initialValues = {name: "", description: "", isPublic: true,}, onClose, onSubmit,}) {
     const [name, setName] = useState(initialValues.name);
     const [description, setDescription] = useState(
         initialValues.description
@@ -364,12 +344,12 @@ function ListFormModal({
                         <span>
                             {isPublic ? (
                                 <>
-                                    <FiGlobe size={16} />
+                                    <FiGlobe size={16}/>
                                     Public list
                                 </>
                             ) : (
                                 <>
-                                    <FiLock size={16} />
+                                    <FiLock size={16}/>
                                     Private list
                                 </>
                             )}

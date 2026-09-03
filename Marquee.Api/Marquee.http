@@ -3,27 +3,33 @@
 ### Create a new Media item
 POST http://localhost:5055/api/media
 Content-Type: application/json
+Authorization: Bearer 
 
 {
-  "mediaType": 1,
-  "Title": "Inception",
-  "Overview": "A thief who steals corporate secrets through the use of dream-sharing technology."
+  "title": "Pulp Fiction",
+  "originalTitle": "Pulp Fiction",
+  "overview": "A burger-loving hitman, his philosophical partner, a drug-addled gangster's moll and a washed-up boxer converge in four tales of violence and redemption.",
+  "posterUrl": "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+  "backdropUrl": "https://image.tmdb.org/t/p/w1280/su89E5A7492A0k0S2y3s13Jk.jpg",
+  "status": 3,
+  "releaseDate": "1994-09-10T00:00:00Z",
+  "tmdbId": 680,
+  "imdbId": 110912,
+  "mediaType": 1
 }
 
 ### Update an existing Media item
-PUT http://localhost:5055/api/media/1
+PUT http://localhost:5055/api/media/2
 Content-Type: application/json
-Authorization: 
+Authorization: Bearer 
 
 {
-  "mediaType": 1,
-  "title": "Inception",
-  "overview": "A thief who steals corporate secrets through the use of dream-sharing technology.",
-  "posterUrl": "https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
-  "backdropUrl": "https://image.tmdb.org/t/p/w1280/8ZTVqvKDQ8emSGUEMjsS4yHAwrp.jpg",
-  "releaseDate": "2010-07-16T00:00:00Z",
-  "tmdbId": 27205,
-  "imdbId": "tt1375666"
+  "title": "The Dark Knight",
+  "originalTitle": "The Dark Knight",
+  "overview": "Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the streets.",
+  "posterUrl": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+  "backdropUrl": "https://image.tmdb.org/t/p/original/2QeXdLNwrD5SufAWhszm4VzpwV6.jpg",
+  "releaseDate": "2008-07-18T00:00:00Z"
 }
 ### Delete an existing Media item
 DELETE http://localhost:5055/api/media/1

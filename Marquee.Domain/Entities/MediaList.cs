@@ -1,4 +1,6 @@
-﻿namespace Marquee.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Marquee.Domain.Entities;
 
 public class MediaList
 {
@@ -14,6 +16,8 @@ public class MediaList
     
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    [NotMapped]
+    public bool ContainsMedia { get; set; }
 
     public ICollection<MediaListItem> Items { get; set; } = [];
 }

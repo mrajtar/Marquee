@@ -1,7 +1,8 @@
 ﻿import { apiRequest } from "./client";
 
-export function getMyLists() {
-    return apiRequest("/api/lists");
+export function getMyLists(mediaId) {
+    const query = mediaId ? `?mediaId=${mediaId}` : "";
+    return apiRequest(`/api/lists${query}`);
 }
 
 export function getListById(id) {

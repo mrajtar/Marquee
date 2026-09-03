@@ -2206,3 +2206,111 @@ a {
     color: var(--color-accent);
     text-decoration: underline;
 }
+.list-search-section {
+    margin: 24px 0 32px;
+}
+
+.list-search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.list-search-input-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.list-search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--color-text-muted);
+    pointer-events: none;
+}
+
+.list-search-input {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    font: inherit;
+    outline: none;
+}
+
+.list-search-input:focus {
+    border-color: var(--color-accent);
+}
+
+.list-search-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.list-search-results {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    overflow: hidden;
+}
+
+.list-search-result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.list-search-result-item:last-child {
+    border-bottom: none;
+}
+
+.list-search-result-info {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.list-search-result-title {
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.list-search-result-year {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.list-search-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.list-search-add-btn:hover {
+    background: var(--color-surface-elevated);
+    color: var(--color-text-primary);
+}
+
+.list-search-add-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.list-search-error {
+    margin-top: 10px;
+    color: #d98b8b;
+    font-size: 0.9rem;
+}

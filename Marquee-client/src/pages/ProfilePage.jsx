@@ -1,17 +1,17 @@
-﻿import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {FiLogOut, FiUser, FiX, FiSave, FiEdit2} from "react-icons/fi";
-import { updateMe, getMe } from "../api/userApi";
+﻿import {useAuth} from "../context/AuthContext";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {FiEdit2, FiLogOut, FiSave, FiUser, FiX} from "react-icons/fi";
+import {getMe, updateMe} from "../api/userApi";
 
 function ProfilePage() {
-    const { user, logout, updateUser } = useAuth();
+    const {user, logout, updateUser} = useAuth();
     const navigate = useNavigate();
-    
+
     const [isEditing, setIsEditing] = useState(false);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
-    
+
     const [displayName, setDisplayName] = useState("");
     const [bio, setBio] = useState("");
     const [profileImageUrl, setProfileImageUrl] = useState("");
@@ -19,7 +19,7 @@ function ProfilePage() {
     function handleLogout() {
         logout();
         setTimeout(() => {
-            navigate("/", { replace: true });
+            navigate("/", {replace: true});
         }, 100);
     }
 
@@ -50,7 +50,7 @@ function ProfilePage() {
                 bio: bio.trim() || null,
                 profileImageUrl: profileImageUrl.trim() || null,
             });
-            
+
             const freshUser = await getMe();
             updateUser(freshUser);
 
@@ -73,7 +73,7 @@ function ProfilePage() {
                             alt={displayNameFallback}
                         />
                     ) : (
-                        <FiUser size={48} />
+                        <FiUser size={48}/>
                     )}
                 </div>
 
@@ -99,7 +99,7 @@ function ProfilePage() {
                                 type="button"
                                 onClick={startEditing}
                             >
-                                <FiEdit2 size={17} />
+                                <FiEdit2 size={17}/>
                                 Edit profile
                             </button>
 
@@ -108,7 +108,7 @@ function ProfilePage() {
                                 type="button"
                                 onClick={handleLogout}
                             >
-                                <FiLogOut size={17} />
+                                <FiLogOut size={17}/>
                                 Log out
                             </button>
                         </div>
@@ -181,7 +181,7 @@ function ProfilePage() {
                                 type="submit"
                                 disabled={saving}
                             >
-                                <FiSave size={17} />
+                                <FiSave size={17}/>
                                 {saving ? "Saving..." : "Save changes"}
                             </button>
 
@@ -191,7 +191,7 @@ function ProfilePage() {
                                 onClick={cancelEditing}
                                 disabled={saving}
                             >
-                                <FiX size={17} />
+                                <FiX size={17}/>
                                 Cancel
                             </button>
                         </div>

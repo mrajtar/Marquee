@@ -1,11 +1,8 @@
-﻿import { useState } from "react";
-import {
-    Link,
-    useNavigate
-} from "react-router-dom";
-import { FiUserPlus } from "react-icons/fi";
+﻿import {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {FiUserPlus} from "react-icons/fi";
 
-import { registerUser } from "../api/authApi";
+import {registerUser} from "../api/authApi";
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -72,7 +69,7 @@ function RegisterPage() {
         <main className="auth-page">
             <div className="auth-card">
                 <div className="auth-heading">
-                    <FiUserPlus size={22} />
+                    <FiUserPlus size={22}/>
 
                     <h1>Create account</h1>
                 </div>

@@ -1,16 +1,16 @@
-﻿import { createContext, useContext, useState, useEffect } from "react";
-import { getMe } from "../api/userApi";
+﻿import {createContext, useContext, useEffect, useState} from "react";
+import {getMe} from "../api/userApi";
 
 const AuthContext = createContext(null);
 
-function AuthProvider({ children }) {
+function AuthProvider({children}) {
     const [token, setToken] = useState(
         localStorage.getItem("accessToken")
     );
-    
+
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    
+
     useEffect(() => {
         async function loadUser() {
             if (!token) {
@@ -21,20 +21,19 @@ function AuthProvider({ children }) {
             try {
                 const currentUser = await getMe();
                 setUser(currentUser);
-            }
-            catch (error) {
+            } catch (error) {
                 console.log("Failed to load current user:", error);
                 localStorage.removeItem("accessToken");
                 setToken(null);
                 setUser(null);
-            }
-            finally {
+            } finally {
                 setLoading(false);
             }
         }
+
         loadUser();
     }, [token]);
-    
+
     function login(accessToken) {
         localStorage.setItem(
             "accessToken",

@@ -22,6 +22,7 @@ function MediaHero({ media }) {
     const [addingToListId, setAddingToListId] = useState(null);
     const [addedListIds, setAddedListIds] = useState(new Set());
     
+    
     const year = media.releaseDate
         ? new Date(media.releaseDate).getFullYear()
         : null;
@@ -36,13 +37,13 @@ function MediaHero({ media }) {
         media.averageRating != null
             ? media.averageRating / 2
             : null;
-
+    
+    
     useEffect(() => {
         if (!isAuthenticated) {
             setUserRating(0);
             return;
         }
-
         async function loadRating() {
             try {
                 const rating =
@@ -94,8 +95,15 @@ function MediaHero({ media }) {
             setListsLoading(true);
             setListsError("");
             try {
-                const data = await getMyLists();
+                const data = await getMyLists(media.id);
                 setLists(data);
+                const initialAdded = new Set();
+                data.forEach((list) => {
+                    if (list.containsMedia) {
+                        initialAdded.add(list.id);
+                    }
+                });
+                setAddedListIds(initialAdded);
             } catch (error) {
                 console.error(error);
                 setListsError("Failed to load your lists.");
@@ -111,6 +119,13 @@ function MediaHero({ media }) {
         try {
             await addMediaToList(listId, media.id);
             setAddedListIds((prev) => new Set(prev).add(listId));
+            setLists((current) =>
+                current.map((list) =>
+                    list.id === listId
+                        ? { ...list, itemCount: (list.itemCount ?? 0) + 1, containsMedia: true }
+                        : list
+                )
+            );
         } catch (error) {
             console.error("Failed to add to list:", error);
             setListsError("Failed to add to list.");
@@ -145,8 +160,8 @@ function MediaHero({ media }) {
                             <div className="list-picker-info">
                                 <span className="list-picker-name">{list.name}</span>
                                 <span className="list-picker-count">
-                  {list.itemCount ?? 0} items
-                </span>
+                                    {list.itemCount ?? 0} items
+                                </span>
                             </div>
                             <button
                                 type="button"

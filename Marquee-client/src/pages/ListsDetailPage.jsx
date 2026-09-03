@@ -1,22 +1,11 @@
-﻿import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-    FiArrowLeft,
-    FiEdit2,
-    FiGlobe,
-    FiLock,
-    FiTrash2,
-    FiX,
-} from "react-icons/fi";
-import {
-    getListById,
-    removeMediaFromList,
-    updateList,
-    deleteList,
-} from "../api/mediaListApi";
+﻿import {useEffect, useState} from "react";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {FiArrowLeft, FiEdit2, FiGlobe, FiLock, FiPlus, FiSearch, FiTrash2, FiX,} from "react-icons/fi";
+import {addMediaToList, deleteList, getListById, removeMediaFromList, updateList} from "../api/mediaListApi";
+import {searchMedia} from "../api/mediaApi";
 
 function ListDetailPage() {
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
     const [list, setList] = useState(null);
@@ -24,6 +13,12 @@ function ListDetailPage() {
     const [error, setError] = useState("");
     const [removingMediaId, setRemovingMediaId] = useState(null);
     const [editing, setEditing] = useState(false);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [searchError, setSearchError] = useState("");
+    const [addingMediaId, setAddingMediaId] = useState(null);
 
     async function loadList() {
         try {
@@ -42,6 +37,50 @@ function ListDetailPage() {
     useEffect(() => {
         loadList();
     }, [id]);
+
+    async function handleSearchSubmit(event) {
+        event.preventDefault();
+        const query = searchQuery.trim();
+        if (!query) return;
+
+        setSearchLoading(true);
+        setSearchError("");
+        try {
+            const results = await searchMedia(query);
+            const existingIds = new Set(list.items.map((item) => item.mediaId));
+            const filteredResults = results.filter((media) => !existingIds.has(media.id));
+            setSearchResults(filteredResults);
+        } catch (error) {
+            console.error(error);
+            setSearchError("Failed to search media.");
+        } finally {
+            setSearchLoading(false);
+        }
+    }
+
+    async function handleAddMedia(media) {
+        if (addingMediaId) return;
+        setAddingMediaId(media.id);
+        try {
+            await addMediaToList(list.id, media.id);
+            const newItem = {
+                mediaId: media.id,
+                title: media.title,
+                posterUrl: media.posterUrl,
+                releaseDate: media.releaseDate,
+            };
+            setList((current) => ({
+                ...current,
+                items: [...current.items, newItem],
+            }));
+            setSearchResults((prev) => prev.filter((m) => m.id !== media.id));
+        } catch (error) {
+            console.error("Failed to add media to list:", error);
+            setError("Failed to add media to list.");
+        } finally {
+            setAddingMediaId(null);
+        }
+    }
 
     async function handleRemove(mediaId, title) {
         const confirmed = window.confirm(
@@ -112,7 +151,7 @@ function ListDetailPage() {
         return (
             <main className="page-container lists-page">
                 <Link to="/lists" className="list-back-link">
-                    <FiArrowLeft size={17} />
+                    <FiArrowLeft size={17}/>
                     Back to lists
                 </Link>
 
@@ -126,7 +165,7 @@ function ListDetailPage() {
     return (
         <main className="page-container list-detail-page">
             <Link to="/lists" className="list-back-link">
-                <FiArrowLeft size={17} />
+                <FiArrowLeft size={17}/>
                 Back to lists
             </Link>
 
@@ -137,12 +176,12 @@ function ListDetailPage() {
 
                         {list.isPublic ? (
                             <span className="list-visibility">
-                                <FiGlobe size={15} />
+                                <FiGlobe size={15}/>
                                 Public
                             </span>
                         ) : (
                             <span className="list-visibility">
-                                <FiLock size={15} />
+                                <FiLock size={15}/>
                                 Private
                             </span>
                         )}
@@ -166,7 +205,7 @@ function ListDetailPage() {
                         className="profile-secondary-button"
                         onClick={() => setEditing(true)}
                     >
-                        <FiEdit2 size={17} />
+                        <FiEdit2 size={17}/>
                         Edit
                     </button>
 
@@ -175,11 +214,62 @@ function ListDetailPage() {
                         className="profile-secondary-button list-delete-button"
                         onClick={handleDelete}
                     >
-                        <FiTrash2 size={17} />
+                        <FiTrash2 size={17}/>
                         Delete
                     </button>
                 </div>
             </header>
+
+            <section className="list-search-section">
+                <form onSubmit={handleSearchSubmit} className="list-search-form">
+                    <div className="list-search-input-wrapper">
+                        <FiSearch size={18} className="list-search-icon"/>
+                        <input
+                            type="text"
+                            placeholder="Search movies or TV shows to add..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="list-search-input"
+                        />
+                    </div>
+                    <button type="submit" className="profile-primary-button" disabled={searchLoading}>
+                        {searchLoading ? "Searching..." : "Search"}
+                    </button>
+                </form>
+
+                {searchResults.length > 0 && (
+                    <ul className="list-search-results">
+                        {searchResults.map((media) => (
+                            <li key={media.id} className="list-search-result-item">
+                                <div className="list-search-result-info">
+                                    <span className="list-search-result-title">{media.title}</span>
+                                    {media.releaseDate && (
+                                        <span className="list-search-result-year">
+                                            {new Date(media.releaseDate).getFullYear()}
+                                        </span>
+                                    )}
+                                </div>
+                                <button
+                                    type="button"
+                                    className="list-search-add-btn"
+                                    onClick={() => handleAddMedia(media)}
+                                    disabled={addingMediaId === media.id}
+                                >
+                                    {addingMediaId === media.id ? (
+                                        "Adding..."
+                                    ) : (
+                                        <>
+                                            <FiPlus size={14}/> Add
+                                        </>
+                                    )}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+                {searchError && <p className="list-search-error">{searchError}</p>}
+            </section>
 
             {error && (
                 <div className="lists-error">
@@ -251,7 +341,7 @@ function ListDetailPage() {
                                     )
                                 }
                             >
-                                <FiX size={17} />
+                                <FiX size={17}/>
                             </button>
                         </article>
                     ))}
@@ -269,7 +359,7 @@ function ListDetailPage() {
     );
 }
 
-function ListEditModal({ list, onClose, onSubmit }) {
+function ListEditModal({list, onClose, onSubmit}) {
     const [name, setName] = useState(list.name);
     const [description, setDescription] = useState(
         list.description || ""
@@ -368,12 +458,12 @@ function ListEditModal({ list, onClose, onSubmit }) {
                         <span>
                             {isPublic ? (
                                 <>
-                                    <FiGlobe size={16} />
+                                    <FiGlobe size={16}/>
                                     Public list
                                 </>
                             ) : (
                                 <>
-                                    <FiLock size={16} />
+                                    <FiLock size={16}/>
                                     Private list
                                 </>
                             )}

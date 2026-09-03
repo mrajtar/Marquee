@@ -1,9 +1,9 @@
-﻿import { useState } from "react";
-import { useNavigate, Link, useLocation } from "react-router-dom";
-import { FiLogIn } from "react-icons/fi";
+﻿import {useState} from "react";
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import {FiLogIn} from "react-icons/fi";
 
-import { useAuth } from "../context/AuthContext";
-import { loginUser } from "../api/authApi";
+import {useAuth} from "../context/AuthContext";
+import {loginUser} from "../api/authApi";
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ function LoginPage() {
 
     const from = location.state?.from?.pathname || "/";
 
-    const { login } = useAuth();
+    const {login} = useAuth();
 
     const [username, setUsername] =
         useState("");
@@ -39,7 +39,7 @@ function LoginPage() {
 
             login(data.accessToken);
 
-            navigate(from, { replace: true });
+            navigate(from, {replace: true});
         } catch (error) {
             console.error("Login failed:", error);
             setError(
@@ -109,12 +109,12 @@ function LoginPage() {
                             : "Log in"}
                     </button>
                 </form>
-            <p className="auth-switch">
-                Don't have an account?{" "}
-                <Link to="/register">
-                    Register
-                </Link>
-            </p>
+                <p className="auth-switch">
+                    Don't have an account?{" "}
+                    <Link to="/register">
+                        Register
+                    </Link>
+                </p>
             </div>
         </main>
     );

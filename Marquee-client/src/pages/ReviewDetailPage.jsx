@@ -1,19 +1,19 @@
-﻿import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { FiArrowLeft, FiHeart, FiEye, FiEyeOff } from "react-icons/fi";
-import { getReviewById } from "../api/reviewApi";
-import { useAuth } from "../context/AuthContext";
-import { likeReview, unlikeReview } from "../api/reviewLikeApi";
+﻿import {Link, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {FiArrowLeft, FiEye, FiEyeOff, FiHeart} from "react-icons/fi";
+import {getReviewById} from "../api/reviewApi";
+import {useAuth} from "../context/AuthContext";
+import {likeReview, unlikeReview} from "../api/reviewLikeApi";
 
 function ReviewDetailPage() {
-    const { reviewId } = useParams();
+    const {reviewId} = useParams();
     const [review, setReview] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showSpoiler, setShowSpoiler] = useState(false);
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
-    const { isAuthenticated } = useAuth();
+    const {isAuthenticated} = useAuth();
 
     useEffect(() => {
         async function loadReview() {
@@ -29,6 +29,7 @@ function ReviewDetailPage() {
                 setLoading(false);
             }
         }
+
         loadReview();
     }, [reviewId]);
 
@@ -41,7 +42,7 @@ function ReviewDetailPage() {
             window.location.href = "/login";
             return;
         }
-        
+
         const previousLiked = liked;
         const previousCount = likeCount;
         setLiked(!liked);
@@ -58,7 +59,7 @@ function ReviewDetailPage() {
     return (
         <div className="page-container review-detail-page">
             <Link to={`/media/${review.mediaId}`} className="media-back-link">
-                <FiArrowLeft size={17} /> Back
+                <FiArrowLeft size={17}/> Back
             </Link>
 
             <article className="review-detail">
@@ -66,7 +67,7 @@ function ReviewDetailPage() {
                     <div className="review-author">
                         <div className="review-avatar">
                             {review.profileImageUrl ? (
-                                <img src={review.profileImageUrl} alt="" />
+                                <img src={review.profileImageUrl} alt=""/>
                             ) : (
                                 <span>{(review.displayName || review.username).charAt(0).toUpperCase()}</span>
                             )}
@@ -82,10 +83,10 @@ function ReviewDetailPage() {
                 <div className="review-detail-content">
                     {review.containsSpoilers && !showSpoiler ? (
                         <div className="spoiler-warning">
-                            <FiEyeOff size={24} />
+                            <FiEyeOff size={24}/>
                             <span>This review contains spoilers.</span>
                             <button type="button" onClick={() => setShowSpoiler(true)}>
-                                <FiEye size={16} /> Reveal review
+                                <FiEye size={16}/> Reveal review
                             </button>
                         </div>
                     ) : (
@@ -99,7 +100,7 @@ function ReviewDetailPage() {
                         className={liked ? "review-like liked" : "review-like"}
                         onClick={handleLike}
                     >
-                        <FiHeart size={18} fill={liked ? "currentColor" : "none"} />
+                        <FiHeart size={18} fill={liked ? "currentColor" : "none"}/>
                         <span>{likeCount}</span>
                     </button>
                 </footer>

@@ -1,4 +1,5 @@
-﻿using Marquee.Application.Exceptions;
+﻿using Marquee.Application.DTOs.MediaList;
+using Marquee.Application.Exceptions;
 using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Repositories;
 using Marquee.Application.Interfaces.Services;
@@ -21,13 +22,17 @@ public class MediaListService : IMediaListService
         _mediaRepository = mediaRepository;
     }
 
-    public async Task<IReadOnlyList<MediaList>> GetUserListsAsync(int userId,
+    public async Task<IReadOnlyList<MediaListDto>> GetUserListsAsync(int userId, int? mediaId = null,
         CancellationToken cancellationToken = default)
     {
-        var lists = await _mediaListRepository.GetByUserIdAsync(userId, cancellationToken);
-        if (_currentUserService.UserId == userId || _currentUserService.IsAdmin)
-            return lists;
-        return [.. lists.Where(l => l.IsPublic)];
+        var lists = await _mediaListRepository.GetUserListDtosAsync(userId, mediaId, cancellationToken);
+
+        if (_currentUserService.UserId != userId && !_currentUserService.IsAdmin)
+        {
+            lists = [.. lists.Where(l => l.IsPublic)];
+        }
+
+        return lists;
     }
 
     public async Task<MediaList?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
