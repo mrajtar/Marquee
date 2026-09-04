@@ -10,6 +10,8 @@ public class RatingConfiguration : IEntityTypeConfiguration<Rating>
     {
         builder.HasKey(r => new { r.UserId, r.MediaId });
 
+        builder.HasIndex(r => r.CreatedAt);
+
         builder.ToTable(t => t.HasCheckConstraint(
             "CK_Rating_Value",
             "[Value] >= 1 AND [Value] <= 20"));

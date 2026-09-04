@@ -4,6 +4,7 @@ using Marquee.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Marquee.Infrastructure.Migrations
 {
     [DbContext(typeof(MarqueeDbContext))]
-    partial class MarqueeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260904145725_AddCreatedAtIndexes")]
+    partial class AddCreatedAtIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,9 +151,6 @@ namespace Marquee.Infrastructure.Migrations
                     b.Property<int?>("TmdbId")
                         .HasColumnType("int");
 
-                    b.Property<double>("TrendingScore")
-                        .HasColumnType("float");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -167,8 +167,6 @@ namespace Marquee.Infrastructure.Migrations
                     b.HasIndex("TmdbId")
                         .IsUnique()
                         .HasFilter("[TmdbId] IS NOT NULL");
-
-                    b.HasIndex("TrendingScore");
 
                     b.ToTable("Media");
 
@@ -235,7 +233,7 @@ namespace Marquee.Infrastructure.Migrations
 
                     b.HasIndex("UserId", "MediaId", "CreatedAt");
 
-                    b.ToTable("MediaInteractions");
+                    b.ToTable("MediaInteraction");
                 });
 
             modelBuilder.Entity("Marquee.Domain.Entities.MediaKeyword", b =>

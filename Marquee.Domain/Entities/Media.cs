@@ -20,6 +20,7 @@ public abstract class Media
     
     public int? TmdbId { get; set; }
     public string? ImdbId { get; set; }
+    public double TrendingScore { get; set; }
 
     public ICollection<MediaGenre> MediaGenres { get; set; } = [];
     public ICollection<MediaPerson> MediaPeople { get; set; } = [];

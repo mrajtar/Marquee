@@ -12,6 +12,8 @@ public interface IMediaService
     Task<IReadOnlyList<Media>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default);
     Task<(double? AverageRating, int RatingCount)> GetRatingSummaryAsync(int mediaId, CancellationToken cancellationToken = default);
     Task<int> GetReviewCountAsync(int mediaId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<MediaListDto>> GetTrendingAsync(int count, CancellationToken cancellationToken = default);
+    Task<MediaListDto?> GetFeaturedAsync(CancellationToken cancellationToken = default);
     Task<Media> AddAsync(Media media, IReadOnlyCollection<int> genreIds, IReadOnlyCollection<int> keywordIds, CancellationToken cancellationToken = default);
     Task UpdateAsync(Media media, IReadOnlyCollection<int> genreIds, IReadOnlyCollection<int> keywordIds, CancellationToken cancellationToken = default);
     Task DeleteAsync(int id, CancellationToken cancellationToken = default);

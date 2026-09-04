@@ -11,6 +11,8 @@ public class MediaConfiguration : IEntityTypeConfiguration<Media>
     {
         builder.HasKey(m => m.Id);
         
+        builder.HasIndex(m => m.TrendingScore);
+        
         builder.Property(m => m.Title)
             .IsRequired()
             .HasMaxLength(200);

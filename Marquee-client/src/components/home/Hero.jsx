@@ -39,7 +39,7 @@ function Hero({ media }) {
                     {year && <span>{year}</span>}
 
                     <span>
-                        {media.mediaType === 0
+                        {media.mediaType === 1
                             ? "Movie"
                             : "TV Show"}
                     </span>

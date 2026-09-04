@@ -71,6 +71,22 @@ public class MediaController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("trending")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetTrending([FromQuery] int count = 20, CancellationToken cancellationToken = default)
+    {
+        var media = await _mediaService.GetTrendingAsync(count, cancellationToken);
+        return Ok(media);
+    }
+
+    [HttpGet("featured")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetFeatured(CancellationToken cancellationToken)
+    {
+        var media = await _mediaService.GetFeaturedAsync(cancellationToken);
+        return media is null ? NotFound() : Ok(media);
+    }
+
     [HttpPost]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(MediaDetailsDto), StatusCodes.Status201Created)]

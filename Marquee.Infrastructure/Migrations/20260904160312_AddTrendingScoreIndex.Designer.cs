@@ -4,6 +4,7 @@ using Marquee.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Marquee.Infrastructure.Migrations
 {
     [DbContext(typeof(MarqueeDbContext))]
-    partial class MarqueeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260904160312_AddTrendingScoreIndex")]
+    partial class AddTrendingScoreIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

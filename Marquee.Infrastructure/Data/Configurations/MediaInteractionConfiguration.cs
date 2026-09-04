@@ -18,6 +18,8 @@ public class MediaInteractionConfiguration : IEntityTypeConfiguration<MediaInter
             .WithMany(m => m.Interactions)
             .HasForeignKey(mi => mi.MediaId)
             .OnDelete(DeleteBehavior.Cascade);
+        
         builder.HasIndex(mi => new { mi.UserId, mi.MediaId, mi.CreatedAt });
+        builder.HasIndex(mi => mi.CreatedAt);
     }
 }

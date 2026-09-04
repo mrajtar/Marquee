@@ -27,7 +27,7 @@ function MediaHero({ media }) {
         ? new Date(media.releaseDate).getFullYear()
         : null;
 
-    const isMovie = media.mediaType === 0;
+    const isMovie = media.mediaType === 1;
 
     const mediaTypeLabel = isMovie
         ? "Movie"

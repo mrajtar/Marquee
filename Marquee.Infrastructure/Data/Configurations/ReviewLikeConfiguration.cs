@@ -9,6 +9,9 @@ public class ReviewLikeConfiguration : IEntityTypeConfiguration<ReviewLike>
     public void Configure(EntityTypeBuilder<ReviewLike> builder)
     {
         builder.HasKey(x => new { x.UserId, x.ReviewId });
+
+        builder.HasIndex(x => x.CreatedAt);
+        
         builder.HasOne(x => x.User)
             .WithMany(u => u.ReviewLikes)
             .HasForeignKey(x => x.UserId)

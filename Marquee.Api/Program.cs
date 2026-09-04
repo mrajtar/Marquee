@@ -6,6 +6,7 @@ using Marquee.Application.Mapping;
 using Marquee.Application.Services;
 using Marquee.Domain.Entities;
 using Marquee.Infrastructure.Authentication;
+using Marquee.Infrastructure.BackgroundJobs;
 using Marquee.Infrastructure.Data;
 using Marquee.Infrastructure.Data.Repositories;
 using Marquee.Infrastructure.Identity;
@@ -50,6 +51,7 @@ builder.Services.AddScoped<IMediaListService, MediaListService>();
 builder.Services.AddHttpClient<ITmdbService, TmdbService>();
 builder.Services.AddScoped<ITmdbService, TmdbService>();
 builder.Services.AddScoped<MediaSeeder>();
+builder.Services.AddHostedService<TrendingScoreUpdaterService>();
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<MediaProfile>(), typeof(MediaProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<PersonProfile>(), typeof(PersonProfile));
 builder.Services.AddAutoMapper(configuration => configuration.AddProfile<GenreProfile>(), typeof(GenreProfile));
@@ -110,10 +112,10 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    await IdentitySeeder.SeedAsync(scope.ServiceProvider);
-}
+//using (var scope = app.Services.CreateScope())
+//{
+// await IdentitySeeder.SeedAsync(scope.ServiceProvider);
+//}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

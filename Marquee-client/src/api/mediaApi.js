@@ -19,3 +19,11 @@ export async function searchMedia(searchTerm) {
         `/api/media/search?searchTerm=${encodeURIComponent(searchTerm)}`
     );
 }
+
+export async function getTrendingMedia(count = 20) {
+    return apiRequest(`/api/media/trending?count=${count}`);
+}
+
+export async function getFeaturedMedia() {
+    return apiRequest(`/api/media/featured`);
+}

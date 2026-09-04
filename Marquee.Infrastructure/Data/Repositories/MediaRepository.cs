@@ -8,7 +8,7 @@ namespace Marquee.Infrastructure.Data.Repositories;
 public class MediaRepository : IMediaRepository
 {
     private readonly MarqueeDbContext _context;
-    
+
     public MediaRepository(MarqueeDbContext context)
     {
         _context = context;
@@ -19,18 +19,18 @@ public class MediaRepository : IMediaRepository
         return await _context.Media
             .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
     }
-    
+
     public async Task<Media?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default)
     {
         return await _context.Media
             .Include(m => m.MediaGenres)
-                .ThenInclude(mg => mg.Genre)
+            .ThenInclude(mg => mg.Genre)
             .Include(m => m.MediaKeywords)
-                .ThenInclude(mk => mk.Keyword)
+            .ThenInclude(mk => mk.Keyword)
             .Include(m => m.MediaPeople)
-                .ThenInclude(mp => mp.Person)
+            .ThenInclude(mp => mp.Person)
             .Include(m => m.MediaCountries)
-                .ThenInclude(mc => mc.Country)
+            .ThenInclude(mc => mc.Country)
             .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
     }
 
@@ -62,26 +62,27 @@ public class MediaRepository : IMediaRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyList<Media>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Media>> SearchAsync(string searchTerm,
+        CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(searchTerm))
             return [];
 
         searchTerm = searchTerm.Trim();
-        
+
         return await _context.Media
             .AsNoTracking()
             .Where(m => m.Title.Contains(searchTerm))
             .OrderBy(m => m.Title)
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<(double? AverageRating, int RatingCount)> GetRatingSummaryAsync(int mediaId,
         CancellationToken cancellationToken = default)
     {
         var ratings = _context.Ratings.Where(r => r.MediaId == mediaId);
         var count = await ratings.CountAsync(cancellationToken);
-        
+
         if (count is 0)
             return (null, 0);
 
@@ -92,6 +93,40 @@ public class MediaRepository : IMediaRepository
     public async Task<int> GetReviewCountAsync(int mediaId, CancellationToken cancellationToken = default)
     {
         return await _context.Reviews.CountAsync(r => r.MediaId == mediaId, cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Media>> GetTrendingAsync(int count, CancellationToken cancellationToken = default)
+    {
+        return await _context.Media
+            .AsNoTracking()
+            .OrderByDescending(m => m.TrendingScore)
+            .Take(count)
+            .ToListAsync(cancellationToken);
+    }
+    
+    public async Task<Media?> GetFeaturedAsync(CancellationToken cancellationToken = default)
+    {
+        var topCandidates = await _context.Media
+            .AsNoTracking()
+            .Where(m => m.BackdropUrl != null)
+            .OrderByDescending(m => m.TrendingScore)
+            .Take(20)
+            .ToListAsync(cancellationToken);
+
+        if (topCandidates.Count == 0)
+            return null;
+
+        var now = DateTime.UtcNow;
+        return topCandidates
+            .Select(m => new
+            {
+                Media = m,
+                FinalScore = m.TrendingScore * 0.7
+                             + GetRecencyBonus(m.ReleaseDate, now) * 30 * 0.3
+            })
+            .OrderByDescending(x => x.FinalScore)
+            .First()
+            .Media;
     }
 
     public async Task AddAsync(Media media, CancellationToken cancellationToken = default)
@@ -110,5 +145,19 @@ public class MediaRepository : IMediaRepository
     {
         ArgumentNullException.ThrowIfNull(media);
         _context.Media.Remove(media);
+    }
+
+    private static double GetRecencyBonus(DateTime? releaseDate, DateTime now)
+    {
+        if (!releaseDate.HasValue)
+            return 0;
+
+        var days = (now - releaseDate.Value).TotalDays;
+        return days switch
+        {
+            <= 0 => 1,
+            >= 30 => 0,
+            _ => 1 - days / 30.0
+        };
     }
 }

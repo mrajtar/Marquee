@@ -1,4 +1,5 @@
-﻿using Marquee.Application.DTOs.Media;
+﻿using AutoMapper;
+using Marquee.Application.DTOs.Media;
 using Marquee.Application.Interfaces;
 using Marquee.Application.Interfaces.Repositories;
 using Marquee.Application.Interfaces.Services;
@@ -10,11 +11,13 @@ public class MediaService : IMediaService
 {
     private readonly IMediaRepository _mediaRepository;
     private readonly IUnitOfWork  _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public MediaService(IMediaRepository mediaRepository, IUnitOfWork unitOfWork)
+    public MediaService(IMediaRepository mediaRepository, IUnitOfWork unitOfWork, IMapper mapper)
     {
         _mediaRepository = mediaRepository;
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
     public async Task<Media?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
@@ -52,6 +55,18 @@ public class MediaService : IMediaService
     public async Task<int> GetReviewCountAsync(int mediaId, CancellationToken cancellationToken = default)
     {
         return await _mediaRepository.GetReviewCountAsync(mediaId, cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<MediaListDto>> GetTrendingAsync(int count, CancellationToken cancellationToken = default)
+    {
+        var media = await _mediaRepository.GetTrendingAsync(count, cancellationToken);
+        return _mapper.Map<IReadOnlyList<MediaListDto>>(media);
+    }
+
+    public async Task<MediaListDto?> GetFeaturedAsync(CancellationToken cancellationToken = default)
+    {
+        var media = await _mediaRepository.GetFeaturedAsync(cancellationToken);
+        return media is null ? null : _mapper.Map<MediaListDto>(media);
     }
 
     public async Task<Media> AddAsync(Media media, IReadOnlyCollection<int> genreIds, IReadOnlyCollection<int> keywordIds, CancellationToken cancellationToken = default)
