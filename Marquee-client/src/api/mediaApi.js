@@ -27,3 +27,17 @@ export async function getTrendingMedia(count = 20) {
 export async function getFeaturedMedia() {
     return apiRequest(`/api/media/featured`);
 }
+
+export async function updateMedia(id, data) {
+    return apiRequest(`/api/media/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+    });
+}
+export async function getGenres() {
+    return apiRequest("/api/genres");
+}
+
+export async function getKeywords() {
+    return apiRequest("/api/keywords");
+}

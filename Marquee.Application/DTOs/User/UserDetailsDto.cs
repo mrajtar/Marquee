@@ -8,4 +8,5 @@ public class UserDetailsDto
     public string? Bio  { get; set; }
     public string? ProfileImageUrl { get; set; }
     public DateTime CreatedAt { get; set; }
+    public bool IsAdmin { get; set; }
 }

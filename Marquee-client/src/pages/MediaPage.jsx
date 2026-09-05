@@ -1,13 +1,16 @@
-﻿import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+﻿import {useContext, useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
 
 import PageContainer from "../components/layout/PageContainer";
 import MediaHero from "../components/media/MediaHero";
 import {getMediaDetails} from "../api/mediaApi";
 import MediaReviews from "../components/media/MediaReviews";
+import {useAuth} from "../context/AuthContext";
+import {FiEdit2} from "react-icons/fi";
 
 function MediaPage() {
     const {id} = useParams();
+    const { isAuthenticated, isAdmin } = useAuth();
 
     const [media, setMedia] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -56,9 +59,21 @@ function MediaPage() {
 
     return (
         <div className="media-page">
+            
             <MediaHero media={media}/>
 
             <PageContainer>
+                {isAuthenticated && isAdmin && (
+                    <div className="media-admin-toolbar">
+                        <Link
+                            to={`/media/${media.id}/edit`}
+                            className="admin-edit-button"
+                        >
+                            <FiEdit2 size={16} />
+                            Edit
+                        </Link>
+                    </div>
+                )}
                 <MediaInformation media={media}/>
                 <MediaReviews
                     mediaId={media.id}

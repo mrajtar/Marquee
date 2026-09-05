@@ -8,14 +8,17 @@ public class MediaProfile : Profile
 {
     public MediaProfile()
     {
-        CreateMap<Media, MediaListDto>();
+        CreateMap<Media, MediaListDto>()
+            .ForMember(dest => dest.MediaType, opt => opt.MapFrom(src => src.Type));
         CreateMap<Genre, GenreDto>();
         CreateMap<Keyword, KeywordDto>();
         CreateMap<Media, MediaDetailsDto>()
             .ForMember(
                 dest => dest.Genres,
-                opt => opt.MapFrom(
-                    src => src.MediaGenres.Select(x => x.Genre)));
+                opt => opt.MapFrom(src => src.MediaGenres.Select(x => x.Genre)))
+            .ForMember(dest => dest.Keywords,
+                opt => opt.MapFrom(src => src.MediaKeywords.Select(x => x.Keyword)))
+            .ForMember(dest => dest.MediaType, opt => opt.MapFrom(src => src.Type));
 
         CreateMap<CreateMediaDto, Movie>()
             .ForMember(

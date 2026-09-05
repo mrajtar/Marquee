@@ -52,6 +52,8 @@ function AuthProvider({children}) {
     function updateUser(userData) {
         setUser(userData);
     }
+    
+    const isAdmin = Boolean(user?.roles?.includes("Admin") || user?.isAdmin === true);
 
     return (
         <AuthContext.Provider
@@ -60,6 +62,7 @@ function AuthProvider({children}) {
                 user,
                 loading,
                 isAuthenticated: Boolean(token && user),
+                isAdmin,
                 login,
                 logout,
                 updateUser

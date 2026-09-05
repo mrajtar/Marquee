@@ -57,7 +57,9 @@ public class UserController : ControllerBase
             return NotFound(new { message = $"Current user was not found." });
         }
         
-        return Ok(_mapper.Map<UserDetailsDto>(user));
+        var result = _mapper.Map<UserDetailsDto>(user);
+        result.IsAdmin = User.IsInRole("Admin");
+        return Ok(result);
     }
 
     [HttpPut("me")]

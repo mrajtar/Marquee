@@ -10,6 +10,8 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ListsPage from "./pages/ListsPage.jsx";
 import ListDetailPage from "./pages/ListsDetailPage.jsx";
+import MediaEditPage from "./pages/MediaEditPage.jsx";
+import RequireAdmin from "./components/auth/RequireAdmin.jsx";
 
 function App() {
     return (
@@ -52,7 +54,15 @@ function App() {
                 <Route
                     path="/lists/:id"
                     element={<ListDetailPage />}
-                    />
+                />
+                <Route
+                    path="/media/:id/edit"
+                    element={
+                    <RequireAdmin>
+                        <MediaEditPage />
+                    </RequireAdmin>
+                    }
+                />
             </Routes>
         </>
     );
