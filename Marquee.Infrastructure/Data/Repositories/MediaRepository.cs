@@ -100,33 +100,19 @@ public class MediaRepository : IMediaRepository
         return await _context.Media
             .AsNoTracking()
             .OrderByDescending(m => m.TrendingScore)
+            .ThenByDescending(m => m.ReleaseDate)
             .Take(count)
             .ToListAsync(cancellationToken);
     }
     
     public async Task<Media?> GetFeaturedAsync(CancellationToken cancellationToken = default)
     {
-        var topCandidates = await _context.Media
+        return await _context.Media
             .AsNoTracking()
             .Where(m => m.BackdropUrl != null)
             .OrderByDescending(m => m.TrendingScore)
-            .Take(20)
-            .ToListAsync(cancellationToken);
-
-        if (topCandidates.Count == 0)
-            return null;
-
-        var now = DateTime.UtcNow;
-        return topCandidates
-            .Select(m => new
-            {
-                Media = m,
-                FinalScore = m.TrendingScore * 0.7
-                             + GetRecencyBonus(m.ReleaseDate, now) * 30 * 0.3
-            })
-            .OrderByDescending(x => x.FinalScore)
-            .First()
-            .Media;
+            .ThenByDescending(m => m.ReleaseDate)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task AddAsync(Media media, CancellationToken cancellationToken = default)
@@ -145,19 +131,5 @@ public class MediaRepository : IMediaRepository
     {
         ArgumentNullException.ThrowIfNull(media);
         _context.Media.Remove(media);
-    }
-
-    private static double GetRecencyBonus(DateTime? releaseDate, DateTime now)
-    {
-        if (!releaseDate.HasValue)
-            return 0;
-
-        var days = (now - releaseDate.Value).TotalDays;
-        return days switch
-        {
-            <= 0 => 1,
-            >= 30 => 0,
-            _ => 1 - days / 30.0
-        };
     }
 }
